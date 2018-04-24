@@ -1,0 +1,10 @@
+node_modules
+.DS_Store
+*.xcuserdatad
+ngrok
+*.pyc
+.idea
+*.vcf
+npm-debug.log
+package-lock.json
+experimental
