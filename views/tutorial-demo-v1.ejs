@@ -1,334 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vue.js Navigation Menu</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chef ++</title>
 
-    <style>
+  <link rel="stylesheet" type="text/css" href="stylesheets/demo.css">
 
-	*{
-		margin:0;
-		padding:0;
-	}
+  <style>
 
-	body{
-		font:15px/1.3 'Open Sans', sans-serif;
-		color: #5e5b64;
-		text-align:center;
-	}
-
-	a, a:visited {
-		outline:none;
-		color:#1c5f7a;
-	}
-
-	a:hover{
-		text-decoration:none;
-	}
-
-	section, footer, header, aside, nav{
-		display: block;
-	}
-
-	nav{
-		display:inline-block;
-		margin:60px auto 45px;
-		background-color:#1c5f7a;
-		box-shadow:0 1px 1px #ccc;
-		border-radius:2px;
-	}
-
-	nav a{
-		display:inline-block;
-		padding: 18px 30px;
-		color:#fff !important;
-		font-weight:bold;
-		font-size:16px;
-		text-decoration:none !important;
-		line-height:1;
-		text-transform: uppercase;
-		background-color:transparent;
-
-		-webkit-transition:background-color 0.25s;
-		-moz-transition:background-color 0.25s;
-		transition:background-color 0.25s;
-	}
-
-	nav a:first-child{
-		border-radius:2px 0 0 2px;
-	}
-
-	nav a:last-child{
-		border-radius:0 2px 2px 0;
-	}
-
-	nav.home .home,
-	nav.rawInput .rawInput,
-	nav.search .search,
-	nav.contact .contact{
-		background-color:#5ec5c0;
-	}
-
-	p{
-		font-size:22px;
-		font-weight:bold;
-		color:#7d9098;
-	}
-
-	p b{
-		color:#ffffff;
-		display:inline-block;
-		padding:5px 10px;
-		background-color:#c4d7e0;
-		border-radius:2px;
-		text-transform:uppercase;
-		font-size:18px;
-	}
-
-
-  .bar{
-      background-color:#1c5f7a;
-
-      background-image:-webkit-linear-gradient(top, #1c5f7a, #5ec5c0);
-      background-image:-moz-linear-gradient(top, #1c5f7a, #5ec5c0);
-      background-image:linear-gradient(top, #1c5f7a, #5ec5c0);
-
-      box-shadow: 0 1px 1px #ccc;
-      border-radius: 2px;
-      width: 400px;
-      padding: 14px;
-      margin: 45px auto 20px;
-      position:relative;
-  }
-
-  .bar input{
-      background:#fff no-repeat 13px 13px;
-      background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=);
-
-      border: none;
-      width: 100%;
-      line-height: 19px;
-      padding: 11px 0;
-
-      border-radius: 2px;
-      box-shadow: 0 2px 8px #c4c4c4 inset;
-      text-align: left;
-      font-size: 14px;
-      font-family: inherit;
-      color: #738289;
-      font-weight: bold;
-      outline: none;
-      text-indent: 40px;
-  }
-
-  .info{
-      background-color:#1c5f7a;
-
-      background-image:-webkit-linear-gradient(top, #1c5f7a, #5ec5c0);
-      background-image:-moz-linear-gradient(top, #1c5f7a, #5ec5c0);
-      background-image:linear-gradient(top, #1c5f7a, #5ec5c0);
-
-      box-shadow: 0 1px 1px #ccc;
-      border-radius: 2px;
-      width: 400px;
-      padding: 14px;
-      margin: 45px auto 20px;
-      position:relative;
-  }
-
-  .info input{
-      background:#fff no-repeat 13px 13px;
-
-      border: none;
-      width: 100%;
-      line-height: 19px;
-      padding: 11px 0;
-
-      border-radius: 2px;
-      box-shadow: 0 2px 8px #c4c4c4 inset;
-      text-align: left;
-      font-size: 14px;
-      font-family: inherit;
-      color: #738289;
-      font-weight: bold;
-      outline: none;
-      text-indent: 40px;
-  }
-
-img{
-  display: block;
-   margin-left: auto;
-   margin-right: auto;
-    max-width: 50%;
-    height: auto;
-}
-
-ul{
-    list-style: none;
-    width: 450px;
-    margin: 0 auto;
-    text-align: left;
-}
-
-ul li{
-    border-bottom: 1px solid #ddd;
-    padding: 2px;
-    overflow: hidden;
-}
-
-ul li img{
-    width:90px;
-    height:60px;
-    float:left;
-    border:none;
-}
-
-ul li p{
-    margin-left: 105px;
-    font-weight: bold;
-    padding-top: 12px;
-    color:#6e7a7f;
-    font:15px/1.3 'Open Sans', sans-serif;
-}
-
-    </style>
+  </style>
 
 </head>
 <body>
 
-<div id="main">
-  <img src="images/logos/SansSerifLogo-v2.png" id="delishlogo">
-	<nav v-bind:class="active" v-on:click.prevent>
-    <a href="#" class="home" v-on:click="makeActive('home')">Home</a>
-		<a href="#" class="rawInput" v-on:click="makeActive('rawInput')">Recipe Input</a>
-		<a href="#" class="search" v-on:click="makeActive('search')">Search</a>
-	</nav>
-  <div v-if="active === 'home'">
-    <div v-if="!loggedIn" class="info">
-       <input type="text" v-model="username" placeholder="Enter your username" />
-       <input type="password" v-model="password" placeholder="Enter your password" />
+  <div id="main">
+    <nav v-bind:class="active" v-on:click.prevent>
+      <img src="images/logos/SansSerifLogo-v2.png" id="delishlogo">
+      <a href="#" class="home" v-on:click="makeActive('home')">Home</a>
+      <a href="#" class="rawInput" v-on:click="makeActive('rawInput')">Recipe Input</a>
+      <a href="#" class="search" v-on:click="makeActive('search')">Recipes</a>
+      <a href="#" class="about" v-on:click="makeActive('about')">About Us</a>
+      <a href="#" class="login" v-on:click="makeActive('login')">Log In</a>
+    </nav>
+    <div>
+      <p>{{msg}}</p>
+    </div>
+
+    <div v-if="active === 'home'">
+      <p>This week's Favorites!</p>
+    </div>
+
+    <div v-else-if="active === 'search'">
+      <div id=search_wrapper>
+        <div class="bar">
+          <input type="text" v-model="searchString" placeholder="" v-on:keyup.enter="search(searchString)"/>
+        </div>  
+        <button class="chefpp-button" v-on:click="search(searchString)">Search</button>
+      </div>      
+      <div id="recipeResultsWrapper">
+        <div v-for="recipe in filteredRecipes" class='recipeBox'>
+          <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
+          <p >{{recipe.caption}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div v-else-if="active === 'createAccount'">
+      <div class="info">
+       <input type="text" v-model="username" placeholder="Username" />
+       <input type="password" v-model="password" placeholder="Password" />
+       <input type="password" v-model="password_confirm" placeholder="Confirm your password" />
      </div>
      <form>
-       <button v-if="!loggedIn" v-on:click="logIn(username, $event)">Log in</button>
-       <button v-else @click.prevent="logOut">Log out</button>
-       {{msg}}
-   </form>
-  </div>
-  <div v-else-if="active === 'search'">
-    <div class="bar">
-      <input type="text" v-model="searchString" placeholder="Enter your search terms" />
+       <button class="chefpp-button" v-on:click="createAccount(username, password, password_confirm, $event)">Submit</button>
+     </form>
     </div>
-    <ul>
-        <li v-for="recipe in filteredRecipes">
-            <a v-bind:href="recipe.url"><img v-bind:src="recipe.image" /></a>
-            <p>{{recipe.title}}</p>
-        </li>
-    </ul>
-   </div>
-   <div v-else>
-     <div>
+
+   <div v-else-if="active === 'rawInput'">
+
+    <input type="text" class="chefpp_input" id="recipe_name" v-model="recipe_name" placeholder="Give Your Recipe A Name!">
+    <div class="recipe_input_wrapper">
+
+      <div class="ingredients_list_wrapper" >
         <h3>Ingredients</h3>
-        <textarea cols="40" rows="5" placeholder="One Ingredient Per Line" class="inp"></textarea>
+        <div class="ingredients_list_item" v-for="ingredient in ingredients">
+          <button class=exit_button v-on:click="removeIngredient(ingredient)">X</button>
+          <p>{{ingredient}}</p>
+        </div>
+        <input type="text" class=chefpp_input v-model="ingredient_input" v-on:keyup.enter="addIngredient()">
       </div>
-      <div>
+
+      <div class="instructions_list_wrapper">
         <h3>Instructions</h3>
-        <textarea cols="40" rows="5" placeholder="One Instruction Per Line" class="inp"></textarea>
+        <div class="instructions_list_item" v-for="instruction in instructions">
+          <button class=exit_button v-on:click="removeInstruction(instruction)">X</button>
+          <p>{{instruction}}</p>
+        </div>
+        <input type="text" class=chefpp_input v-model="instruction_input" v-on:keyup.enter="addInstruction()">
       </div>
-      <input type="button" onclick="location.href='http://web.stanford.edu/~kramerh/delish/index.html';" value="Submit" />
+
+    </div>
+    <div>
+    </div>
+    <input type="button" onclick="location.href='http://web.stanford.edu/~kramerh/delish/index.html';" value="Submit" class="chefpp-button"/>
+  </div>
+
+  <div v-else-if="active === 'about'">
+    <p>We are us</p>
+  </div>
+  <div v-else>
+    <div v-if="!loggedIn" class="info">
+     <input type="text" v-model="username" placeholder="Username" />
+     <input type="password" v-model="password" placeholder="Password" />
    </div>
+   <form>
+     <button class="chefpp-button" v-if="!loggedIn" v-on:click="logIn(username, $event)">Log in</button>
+     <button v-else @click.prevent="logOut">Log out</button>
+     <button class="chefpp-button" v-if="!loggedIn" v-on:click="makeActive('createAccount')">Create Account</button>
+   </form>
+ </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.0/vue.min.js"></script>
-<script>
+<script >  window.favRecipes = <%- recipes %> </script>
+<script type="text/javascript" src='javascripts/demo.js'></script>
 
-var demo = new Vue({
-	el: '#main',
-	data: {
-		active: 'home',
-    searchString: '',
-    username: '',
-    password: '',
-    loggedIn: false,
-    msg: '',
-    recipes: [
-        {
-            "title": "MasterChef Junior Seared Steaks & Maple Brussels Sprouts",
-            "url": "https://www.blueapron.com/recipes/tune-in-to-fox-4-20-at-8-7c-we-ll-reveal-the-recipe-4-23",
-            "image": "https://media.blueapron.com/recipes/3061/c_main_dish_images/1523888126-1-0003-5042/0430_FPM_Steak_5509_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Florentine Roast Pork & Salsa Verde with Sautéed Vegetables",
-            "url": "https://www.blueapron.com/recipes/florentine-roast-pork-salsa-verde-with-sauteed-vegetables",
-            "image": "https://media.blueapron.com/recipes/2898/c_main_dish_images/1521568863-1-0025-2556/0423_FPM_Tuscan-Pork_3912_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Baked Harissa Chicken with Farro & Vegetable Salad",
-            "url": "https://www.blueapron.com/recipes/baked-harissa-chicken-with-farro-vegetable-salad",
-            "image": "https://media.blueapron.com/recipes/2911/c_main_dish_images/1522258821-1-0019-8808/0430_2PP_Harissa-Bakd-Chicken_4362_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Sheet Pan Pesto Salmon with Roasted Vegetable Medley",
-            "url": "https://www.blueapron.com/recipes/sheet-pan-pesto-salmon-with-roasted-vegetable-medley",
-            "image": "https://media.blueapron.com/recipes/2902/c_main_dish_images/1523553680-1-0005-3899/0423_FPF_Salmon_4128_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Mexico City Chicken Tinga Tostadas with Avocado & Refried Beans",
-            "url": "https://www.blueapron.com/recipes/mexico-city-chicken-tinga-tostadas-with-avocado-refried-beans",
-            "image": "https://media.blueapron.com/recipes/2907/c_main_dish_images/1522163313-1-0026-9285/0430_2PRE07_Spicy-Chicken-Tinga_4390_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Ginger Pork Burgers with Black Bean Mayo & Roasted Broccoli",
-            "url": "https://www.blueapron.com/recipes/ginger-pork-burgers-with-black-bean-mayonnaise-furikake-broccoli",
-            "image": "https://media.blueapron.com/recipes/2850/c_main_dish_images/1519164998-1-0012-5523/0326_2PRE08_Ginger-Pork-Burgers_2041_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Seared Salmon & Spicy Orange Salsa with Quinoa & Carrot Salad",
-            "url": "https://www.blueapron.com/recipes/salmon-spicy-orange-salsa-with-quinoa-carrot-salad",
-            "image": "https://media.blueapron.com/recipes/2891/c_main_dish_images/1521666264-1-0005-2407/0423_2PF_Salmon-Spicy-Salsa_3859_WEB_Center_high_also_thumb.jpg"
-        },
-        {
-            "title": "Parisian Steak Frites",
-            "url": "https://www.blueapron.com/recipes/steak-frites-herb-butter-with-roasted-broccoli-aioli-3",
-            "image": "https://media.blueapron.com/recipes/2884/c_main_dish_images/1521043763-1-0002-7218/0416_2PM_Steak-Frites_3634_WEB_Center_high_also_thumb.jpg"
-        }
-    ]
-	},
-  computed: {
-      filteredRecipes: function () {
-          var recipes_array = this.recipes,
-              searchString = this.searchString;
-
-          if(!searchString){
-              return recipes_array;
-          }
-
-          searchString = searchString.trim().toLowerCase();
-
-          recipes_array = recipes_array.filter(function(item){
-              if(item.title.toLowerCase().indexOf(searchString) !== -1){
-                  return item;
-              }
-          })
-          return recipes_array;;
-      }
-  },
-  methods: {
-    makeActive: function(item){
-      this.active = item;
-    },
-    logIn: function(userName, event) {
-        event.preventDefault();
-        this.loggedIn = true;
-        this.msg = 'Welcome, ' + userName + '!';
-    },
-    logOut: function() {
-        this.loggedIn = false;
-        this.msg = 'So long!';
-    }
-  }
-});
-</script>
 </body>
 </html>

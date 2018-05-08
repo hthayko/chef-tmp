@@ -6,7 +6,7 @@ module.exports = {
   getFavorites : (count) => {
     count = count || 9;
     console.log(`model getFavorites: count: ${count}`)
-    const queryString = "SELECT * FROM recipe LIMIT $1"
+    const queryString = "SELECT * FROM recipe where id <= $1"
     return DB.any(queryString, [count]);
   },
 

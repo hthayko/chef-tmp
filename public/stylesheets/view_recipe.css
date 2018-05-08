@@ -1,0 +1,254 @@
+#list {
+  display: none;
+  position:absolute;
+  left: 30px;
+}
+
+.btn {
+  float: left;
+  width:5%;
+  margin: 165px 10px 155px 10px;
+  text-align: center;
+}
+
+.stepcontainer {
+  font-family: Oswald;
+}
+
+.listed-steps{
+  margin-right: 5px;
+  margin-top: 0px;
+  padding: 0;
+  list-style-type: none;
+}
+
+.listed-steps li{
+  counter-increment: step-counter;
+  margin-bottom: 7px;
+  margin-left: 10px;
+  font-size: 17px;
+  text-indent: -29px;
+}
+
+.listed-steps li::before {
+  content: counter(step-counter);
+  margin-right: 5px;
+  font-size: 15px;
+  background-color: #ffa64d;
+  color: white;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+.dark-color {
+  color: #1D607B;
+}
+
+.light-color {
+  color: #64CECA;
+}
+
+#direction-header{
+  margin: 10px 0px 10px 0px;
+}
+
+#step_instructions{
+  width:890px;
+  height: 360px;
+  margin: 0;
+  display: flex;
+  justify-content:center;
+  align-content:center;
+  flex-direction:column; /* column | row */
+}
+
+#step_instructions_container{
+  float:left;
+  width:890px;
+  height:360px;
+  font-size: 36px;
+}
+
+#ingredients{
+  height:100%;
+  position: fixed;
+  width: 200px;
+  top:160px;
+  left:0;
+  font-family: Oswald;
+  background-color: #F5F5F5;
+}
+
+.ingredient-list{
+  margin: 5px 5px 0px 10px;
+}
+
+#ingr-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0px 10px 10px;
+}
+
+#section-title {
+  font-family: Oswald;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0px 10px 10px;
+}
+
+#stepview{
+  width: 82%;
+  position:absolute;
+  top:160px;
+  left:215px;
+  background-color: white;
+  height: 415px;
+}
+#headerstuff {
+  margin: 10px 10px 0px 10px;
+}
+
+#recipename {
+  font-size: 45px;
+  font-family: 'Luckiest Guy', cursive;
+}
+
+#timelinediv{
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%;
+  height:160px;
+  background-color: white;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+#timeline{
+  background-color: white;
+}
+
+#logo{
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: inherit;
+  width: 140px;
+  float: right;
+  margin: 18px 10px 0px 10px;
+}
+
+#total-time-label{
+  float: right;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-family: Oswald;
+}
+
+#next {
+  background-color:#64CECA; /*light color*/
+  -moz-border-radius:6px;
+  -webkit-border-radius:6px;
+  border-radius:6px;
+  border:1px solid #64CECA;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 24px;
+  text-decoration:none;
+}
+#next:hover {
+  background-color:#1D607B; /*dark color*/
+}
+
+#back {
+  background-color:#f9f9f9;
+  -moz-border-radius:6px;
+  -webkit-border-radius:6px;
+  border-radius:6px;
+  border:1px solid #dcdcdc;
+  display:inline-block;
+  cursor:pointer;
+  color:#666666;
+  font-family:Arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 24px;
+  text-decoration:none;
+}
+
+#back:hover {
+  background-color: #b3b3b3;
+}
+
+
+
+
+
+/*Toggle styles*/
+
+.form{
+  float:right;
+}
+
+.switch-field {
+  font-family: Oswald;
+  overflow: hidden;
+  float:left;
+  margin-left: 10px;
+  width:100%;
+}
+
+.switch-title {
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.switch-field input {
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+  height: 0px;
+  width: 0px;
+  border: 0;
+  overflow: hidden;
+}
+
+.switch-field label {
+  display: inline-block;
+  width: 70px;
+  background-color: #e4e4e4;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 15px;
+  font-weight: normal;
+  text-align: center;
+  text-shadow: none;
+  padding: 6px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition:    all 0.1s ease-in-out;
+  -ms-transition:     all 0.1s ease-in-out;
+  -o-transition:      all 0.1s ease-in-out;
+  transition:         all 0.1s ease-in-out;
+}
+
+.switch-field label:hover {
+  cursor: pointer;
+}
+
+.switch-field input:checked + label {
+  background-color: #64CECA/*#A5DC86*/; /*light color*/
+  font-style: normal;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.switch-field label:first-of-type {
+  border-radius: 4px 4px 4px 4px;
+}
+
+.switch-field label:last-of-type {
+  border-radius: 4px 4px 4px 4px;
+}

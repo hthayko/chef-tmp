@@ -4,17 +4,37 @@ const recipeController = require('../controllers/recipe_controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Chef++' });
+  recipeController.getFavorites(9)
+    .then((data) => {
+      res.render('tutorial-demo-v1', {recipes: JSON.stringify(data)});
+    })
+    .catch((err) => {
+      console.log(err)
+      return res.send({
+        "status" : "error", 
+        "errorMsg" : err.message
+      })
+    })      
 });
 
-router.get('/demo', function(req, res, next) {
-  res.render('tutorial-demo-v1');
+router.get('/recipe/:id', function(req, res, next) {
+  var id = req.params.id;
+  recipeController.getByID(id)
+  .then((data) => {
+    res.render('view_recipe', {recipe : JSON.stringify(data)});
+  })
+  .catch((err) => {
+    console.log(err)
+    return res.send({
+      "status" : "error", 
+      "errorMsg" : err.message
+    })
+  })      
+  
 });
 
 
-router.get('/demo', function(req, res, next) {
-  res.render('tutorial-demo-v1');
-});
+
 
 router.get('/api/getFavorites',   (req, res, next) => {
     var count = req.query.count

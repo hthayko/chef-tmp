@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Delish</title>
+  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/view_recipe.css">
+</head>
+<body>
+  <div id=stepview>
+    <div id=direction-header>
+    <span class='dark-color' id='section-title'>Directions</span>
+    <form class="form">
+        <div class="switch-field">
+            <span class="switch-title">View Steps:</span>          
+            <input type="radio" id="switch_left" name="switch" value="step" checked/>
+            <label for="switch_left">Individual</label>
+            <input type="radio" id="switch_right" name="switch" value="list" />
+            <label for="switch_right">List All</label>
+        </div>
+    </form>
+    </div>   
+    <div class='stepcontainer' id='individual'>
+      <button class='btn' id='back'><</button>
+      <div id='step_instructions_container'><p id='step_instructions'>the instructions</p></div>
+      <button class='btn' id='next'>></button>
+    </div> 
+    <div class='stepcontainer' id='list'>
+      <ol class='listed-steps'></ol>
+    </div>
+  </div>
+  
+  <div id=ingredients>
+    <p class='section-title dark-color' id=ingr-title>Ingredients</p>
+  </div>
+
+  <div id=timelinediv>
+    <div id=headerstuff>
+      <span id=recipename>recipe name</span>
+      <img src="logos/SansSerifLogo-v2.png" id="logo">
+    </div>
+    <div id=total-time-label>Total Time: 65 mins</div>
+    <svg id=timeline>
+      <defs> 
+        <pattern id="gray-stripe" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+          <rect id='pattern' width="4" height="8" transform="translate(0,0)" fill="rgb(200,200,200)"></rect> 
+        </pattern>
+        <pattern id="orange-stripe" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+          <rect id='pattern' width="4" height="8" transform="translate(0,0)" fill="#ffa64d"></rect> 
+        </pattern>        
+      </defs>
+    </svg>
+  </div>
+  <script >  window.recipe = <%- recipe %> </script>
+  <script type="text/javascript" src="/javascripts/view_recipe.js"></script>
+</body>
