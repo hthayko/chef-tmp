@@ -89,6 +89,13 @@
 		color:#7d9098;
 	}
 
+  h1 {
+    font-size: 40px;
+    color: #1c5f7a;
+  }
+
+
+
 	p b{
 		color:#ffffff;
 		display:inline-block;
@@ -130,7 +137,7 @@
 
   .bar input{
       background:#fff no-repeat 13px 13px;
-      background-image: url('../images/pictures/search_icon.png');
+      background-image: url('../images/search_icon.png');
       background-size: 100px 200px;
 
       border: none;
@@ -178,9 +185,13 @@
       margin:1em;
   }
 
+#homeWrapper h1{
+    width: 30%;
+    margin-left: 2.5%;
+    margin-bottom: 0.5em;
+}
 
-
-#recipeResultsWrapper{
+.recipeResultsWrapper{
   margin-left: 5%;
   display: flex;
   justify-content: flex-start;
@@ -232,6 +243,7 @@
 .recipeBox p:hover{
   cursor: pointer;
 }
+
 
 /* Beginning of style for recipe input page */
 .recipe_input_wrapper {

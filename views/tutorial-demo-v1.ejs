@@ -28,21 +28,28 @@
       <p>{{msg}}</p>
     </div>
 
-    <div v-if="active === 'home'">
-      <p>This week's Favorites!</p>
+    <div id="homeWrapper" v-if="active === 'home'">
+      <h1>This Week's Favorites!</h1>      
+      <div class="recipeResultsWrapper">
+        <div v-for="recipe in favRecipes" class='recipeBox'>
+          <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
+          <p >{{recipe.caption}}</p>
+        </div>
+      </div>
+
     </div>
 
     <div v-else-if="active === 'search'">
       <div id=search_wrapper>
         <div class="bar">
-          <input type="text" v-model="searchString" placeholder="" v-on:keyup.enter="search(searchString)"/>
+          <input type="text" v-model="searchString" placeholder="" v-on:keyup.enter="searchForRecipes()"/>
         </div>  
-        <button class="chefpp-button" v-on:click="search(searchString)">Search</button>
-      </div>      
-      <div id="recipeResultsWrapper">
-        <div v-for="recipe in filteredRecipes" class='recipeBox'>
-          <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
-          <p >{{recipe.caption}}</p>
+        <button class="chefpp-button" v-on:click="searchForRecipes()">Search</button>
+      </div>
+      <div class="recipeResultsWrapper">
+        <div v-for="recipe in searchedRecipes" class='recipeBox'>
+            <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
+            <p >{{recipe.caption}}</p>
         </div>
       </div>
     </div>
@@ -87,8 +94,9 @@
     <input type="button" onclick="location.href='http://web.stanford.edu/~kramerh/delish/index.html';" value="Submit" class="chefpp-button"/>
   </div>
 
-  <div v-else-if="active === 'about'">
-    <p>We are us</p>
+  <div id=about-wrapper v-else-if="active === 'about'">
+    <p>We Are</p>
+    <h1> Chef++ </h1>
   </div>
   <div v-else>
     <div v-if="!loggedIn" class="info">

@@ -9,14 +9,15 @@ var options = {
 var pgp = require('pg-promise')(options);
 var parseDbUrl = require("parse-database-url");
 
-const database_url = process.env.CHEF_PP_DATABASE_URL;
+// const database_url = process.env.CHEF_PP_DATABASE_URL;
+const database_url = "postgres://oipibvqexatgcl:9bc8137955c4d724922d19d1cc703cfbae037e12fb9289f9954ead827093a208@ec2-23-23-247-222.compute-1.amazonaws.com:5432/dbq63rkh655s1a"
 var url_data = parseDbUrl(database_url);
 
 
 var ssl = true;
-if (process.env.APP_ENV == "local") {
-  ssl = false;
-}
+// if (process.env.APP_ENV == "local") {
+//   ssl = false;
+// }
 
 const DB = pgp({
     poolSize: 20,

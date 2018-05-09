@@ -2,7 +2,7 @@
 var demo = new Vue({
 	el: '#main',
 	data: {
-		active: 'search',
+		active: 'home',
     searchString: '',
     username: '',
     password: '',
@@ -14,26 +14,15 @@ var demo = new Vue({
     instructions: [],
     ingredient_input: "",
     instruction_input: "",
-    recipes: favRecipes
+    favRecipes: favRecipes,
+    searchedRecipes: [],
 	},
   computed: {
       filteredRecipes: function () {
-          var recipes_array = this.recipes,
-              searchString = this.searchString;
-
-          if(!searchString){
-              return recipes_array;
-          }
-
-          searchString = searchString.trim().toLowerCase();
-
-          recipes_array = recipes_array.filter(function(item){
-              if(item.title.toLowerCase().indexOf(searchString) !== -1){
-                  return item;
-              }
-          })
+          var recipes_array = this.recipes;
           return recipes_array;;
       }
+
   },
   methods: {
     makeActive: function(item){
@@ -58,6 +47,7 @@ var demo = new Vue({
       // Log in user
       this.logIn(userName, event);
     },
+
     addIngredient: function() {
       var str = this.ingredient_input
       str = str.charAt(0).toUpperCase() + str.slice(1);
@@ -82,6 +72,34 @@ var demo = new Vue({
         this.ingredients.splice(index, 1);
       }
       console.log(this.ingredients)
+    },
+    searchForRecipes(){
+      searchString = this.searchString.trim().toLowerCase();
+      var numberOfRecipes = "21";
+      var offset = "0";
+      var get_url = "http://chefpp.herokuapp.com/api/search?term=" + searchString 
+                      + "&limit=" + numberOfRecipes + "&offset=" + offset;
+
+      page = this;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var recipes = JSON.parse(this.response);
+          for (var i=0; i < recipes.length; i ++){
+            if (recipes[i].dish_image_url === null){
+              recipes[i].dish_image_url = '../images/default-missing-photo.png'
+            }
+          }
+          page.searchedRecipes = recipes
+        }
+        else if (this.status != 200){
+          console.log("ERROR when requesting recipes with search term: response code ", this.status);
+        }
+      };
+      xhttp.open("GET", get_url, true);
+      xhttp.send();
+
+
     }
 
   }
