@@ -9,6 +9,12 @@ module.exports = {
     delete o["item"];
     delete o["item-href"];
     o.instructions = _.map(JSON.parse(r.instructions), 'instructions')
+    o.instructions = _.map(o.instructions, ins => {
+      return {
+        "time" : null,
+        "text"  : ins
+      }      
+    })
     o.ingredients = _.map(JSON.parse(r.ingredient), 'ingredient')
     o.ingredients = _.map(o.ingredients, ing => {
       return {

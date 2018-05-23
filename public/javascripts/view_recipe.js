@@ -110,7 +110,7 @@ function main(callback){
     .enter()
     .append('li')
     .attr('class', 'listed-steps')
-    .text(function(d){ return d; });
+    .text(function(d){ return d.text; });
 
   // //Add arrows to timeline
   // let lastX = arrowEndMargin;
@@ -225,7 +225,7 @@ function unhighlightArrow(id, idStr){
 }
 
 function replaceStep(){
-  d3.select('#step_instructions').text(recipe.instructions[currStepId]);
+  d3.select('#step_instructions').text(recipe.instructions[currStepId].text);
   let i;
   // let ingredientIDs = recipe.instructions[currStepId].ingred_used;
   // d3.selectAll('.ingredient-list')
