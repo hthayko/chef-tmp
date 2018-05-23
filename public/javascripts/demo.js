@@ -106,7 +106,7 @@ var demo = new Vue({
       }
       var numberOfRecipes = "21";
       var offset = "0";
-      var get_url = "http://localhost:4000/api/search?term=" + searchString 
+      var get_url = "http://chefpp.herokuapp.com/api/search?term=" + searchString 
                       + "&limit=" + numberOfRecipes + "&offset=" + offset;
 
       page = this;
