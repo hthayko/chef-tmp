@@ -11,7 +11,7 @@ module.exports = {
     o.instructions = _.map(JSON.parse(r.instructions), 'instructions')
     o.instructions = _.map(o.instructions, ins => {
       return {
-        "time" : null,
+        "time" : extractTimeFromText(ins),
         "text"  : ins
       }      
     })
@@ -25,4 +25,29 @@ module.exports = {
     delete o["ingredient"];
     return o;
   }
+}
+
+
+function extractTimeFromText(text) {
+  var ret;
+
+  ret = text.match(/\d+ to \d+ minute/); // 12 to 17 minutes
+  if(ret) return ret[0];
+
+  ret = text.match(/\d+ minute/);  // 17 minutes, about 5 minutes
+  if(ret) return ret[0];
+
+  ret = text.match(/\d+ to \d+ hour/); // 12 to 17 minutes
+  if(ret) return ret[0];
+
+  ret = text.match(/\d+ hour/);  // 17 minutes, about 5 minutes
+  if(ret) return ret[0];
+
+  ret = text.match(/\d+ to \d+ second/); // 12 to 17 minutes
+  if(ret) return ret[0];
+
+  ret = text.match(/\d+ second/);  // 17 minutes, about 5 minutes
+  if(ret) return ret[0];
+
+  return null;
 }

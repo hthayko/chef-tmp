@@ -12,7 +12,6 @@
 
 	a, a:visited {
 		outline:none;
-		color:#1c5f7a;
 	}
 
 	a:hover{
@@ -24,6 +23,9 @@
     outline: 0;
   }
 
+  input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #1c5f7a;
+  }
 	section, footer, header, aside, nav{
 		display: block;
 	}
@@ -33,74 +35,69 @@
     bottom: 2px;
 		display:flex;
     justify-content:space-around;
+    align-items: center;
 		margin: auto;
     margin-top: 0;
-    border-top: 5px solid #5ec5c0;
-    margin-bottom: 45px;
 		background-color: #1c5f7a;
-		box-shadow:0 1px 1px #ccc;
-		border-radius:2px;
     width: 100%;
+    border-bottom: 80px solid #e7e6dd;
 
 	}
   nav img{
-    height: 40px;
-    margin-right: auto;
-    margin-left: 10px;
-    margin-top: 5px;
-
+    height: 60px;
+    margin-right: 12%;
+    margin-left: 5%;
+    margin-top: 1em;
+    margin-bottom: 1em;
   }
 
 	nav a{
-		display:inline-block;
-		padding: 18px 30px;
-		color:#fff !important;
+    padding: 2% 10px;
+		color: grey;
 		font-weight:bold;
-		font-size:16px;
+		font-size:25px;
 		text-decoration:none !important;
 		line-height:1;
 		text-transform: uppercase;
 		background-color:transparent;
+    margin-bottom: 0;
+    margin-top: 0;
 
-		-webkit-transition:background-color 0.25s;
-		-moz-transition:background-color 0.25s;
-		transition:background-color 0.25s;
+		-webkit-transition:color 0.25s;
+		-moz-transition:color 0.25s;
+		transition:color 0.25s;
 	}
 
-	nav a:first-child{
-		border-radius:2px 0 0 2px;
-	}
-
-	nav a:last-child{
-		border-radius:0 2px 2px 0;
-	}
+  nav a:hover{
+    color: white;
+  }
 
 	nav.home .home,
 	nav.rawInput .rawInput,
 	nav.search .search,
 	nav.about .about,
-  nav.login .login{
-		background-color:#5ec5c0;
+  nav.savedRecipes .savedRecipes,
+  nav.login .login,
+  nav.createAccount .createAccount{
+		color: white;
 	}
 
 	p{
 		font-size:22px;
 		font-weight:bold;
-		color:#7d9098;
+		color: #7d9098;
 	}
 
   h1 {
-    font-size: 40px;
+    font-size: 25px;
     color: #1c5f7a;
   }
-
-
 
 	p b{
 		color:#ffffff;
 		display:inline-block;
 		padding:5px 10px;
-		background-color:#c4d7e0;
+		background-color: #c4d7e0;
 		border-radius:2px;
 		text-transform:uppercase;
 		font-size:18px;
@@ -113,6 +110,8 @@
     font-size: 20px;
     margin: 20px;
     font-weight: bold;
+    border-radius: 3px;
+    border: none;
   }
 
   .chefpp-button:hover{
@@ -123,22 +122,22 @@
   #search_wrapper {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    padding-left: 5%;
+    padding-right: 5%;
+    border-bottom: 1px solid #e7e6dd;
+  }  
+  #search_wrapper .chefpp-button {
+    margin-left: 10px;
   }
 
   .bar{
-
-      border-radius: 2px;
-      width: 400px;
-      padding: 14px;
-      margin-left: 2.5%;
-      position:relative;
-
+      border-radius: 5px;
+      width: 100%;
   }
 
   .bar input{
       background:#fff no-repeat 13px 13px;
-      background-image: url('../images/search_icon.png');
-      background-size: 100px 200px;
 
       border: none;
       width: 100%;
@@ -146,14 +145,14 @@
       padding: 11px 0;
 
       border-radius: 2px;
-      box-shadow: 0 2px 8px #c4c4c4 inset;
       text-align: left;
-      font-size: 14px;
+      font-size: 20px;
       font-family: inherit;
-      color: #738289;
-      font-weight: bold;
+      background-color: #e7e6dd;
+      color: #1c5f7a;
+      font-style: italic;
       outline: none;
-      text-indent: 40px;
+      text-indent: 20px;
   }
 
   .info{
@@ -187,9 +186,68 @@
 
 #homeWrapper h1{
     width: 30%;
-    margin-left: 2.5%;
+    margin-left: 5%;
+    margin-right: auto;
     margin-bottom: 0.5em;
+    padding-left: 10px;
+    text-align: left;
+    margin-top: 45px;
 }
+
+.search-results-label{
+    padding: 1em 0;
+    text-align: left;
+    margin-left: 5%;
+    padding-left: 10px;
+  }
+
+#categories_wrapper{
+  border-bottom: 1px solid #e7e6dd;
+}
+
+#categories_wrapper h1 {
+    padding: 1em 0;
+    text-align: left;
+    margin-left: 5%;
+    padding-left: 10px;
+}
+
+
+#categoryBoxes_wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding: 0 10px;
+  margin: 0 5%;
+  margin-bottom: 40px;
+}
+
+.categoryBox{
+  width: 6em;
+  height: 6em;
+  margin: 2px;
+  margin-bottom: 0;
+  background-color: #1c5f7a;
+} 
+#categoryBoxes_wrapper:hover {
+  cursor: pointer;
+}
+
+#categoryBoxes_wrapper p{
+  font-weight: bold;
+  font-size: 14px;
+  color: #1c5f7a;
+  padding: 10px;
+  border-top: none; 
+  
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+  transform: translate(0, -100%);
+  opacity: 1;
+}
+
 
 .recipeResultsWrapper{
   margin-left: 5%;
@@ -203,14 +261,14 @@
   flex-direction: column;
   width:30%;
   margin: 10px;
-  max-height: 150px;
+  max-height: 140px;
   opacity: 0.8;
+  border: 2px solid #1c5f7a;
 }
 
 .recipeBox:hover {
   opacity: 1;
 }
-
 
 .recipeBox a {
   width: 100%;
@@ -226,7 +284,6 @@
   object-fit: cover;
 }
 
-
 .recipeBox p {
   font-weight: bold;
   font-size: 20px;
@@ -240,32 +297,45 @@
   transform: translate(0, -100%);
   opacity: 1;
 }
+
 .recipeBox p:hover{
   cursor: pointer;
 }
 
 
 /* Beginning of style for recipe input page */
+#recipe_input_view {
+  position: relative;
+  bottom: 5px;
+  background-color: #e7e6dd;
+  height: -webkit-fill-available;
+}
+
 .recipe_input_wrapper {
-  margin: 5px 5px 10px;
+  margin: 40px 5px 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
 .ingredients_list_wrapper, .instructions_list_wrapper {
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 40%;
   padding: 10px;
-  box-shadow: 0 2px 8px #c4c4c4 ;
+}
+
+.ingredients_list_wrapper h1, .instructions_list_wrapper  h1 {
+  text-align: left;
+  padding: 1em 0;
 }
 
 
 .ingredients_list_item, .instructions_list_item{
   display: flex;
   justify-content: flex-start;
-  border-bottom: 2px solid rgba(0,0,0,0.1);
-  margin-bottom: 10px;
+  background-color: #e7e6dd;
+  padding-bottom: 10px;
+  color: #1c5f7a
 }
 
 .ingredients_list_item p, .instructions_list_item p {
@@ -278,6 +348,7 @@
   border: none;
   font-size: 30px;
   font-weight: bold;
+  background-color: #e7e6dd;
   color: #7d9098;
   margin-right: 5px;
   margin-left: 5px;
@@ -294,14 +365,13 @@
   color: #1c5f7a
 } 
 
-#recipe_name {
-  width: 96%;   
+#recipe_name { 
+  width: 80%;
   text-align: center;
   text-indent: 0;
   color: #1c5f7a;
-  margin: 0 2% 1em;
-
-  box-shadow: 0 2px 8px #c4c4c4;
+  margin: 0 10% 1em 10%;
+  box-shadow: 0 10px 8px #c4c4c4;
 }
 
 .chefpp_input {
@@ -315,11 +385,10 @@
   align-self: flex-end;
 
   border-radius: 2px;
-  box-shadow: 0 2px 8px #c4c4c4 inset;
   text-align: left;
   font-size: 30px;
   font-family: inherit;
-  color: #738289;
+  color: #1c5f7a;
   font-weight: bold;
   outline: none;
   text-indent: 40px;
