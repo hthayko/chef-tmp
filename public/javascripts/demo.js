@@ -1,4 +1,4 @@
-var baseURL = "http://localhost:4000"
+var baseURL = "http://chefpp.herokuapp.com"
 
 var demo = new Vue({
   el: '#main',
@@ -77,7 +77,7 @@ var demo = new Vue({
           return;
         }
 
-        var post_URL = "http://localhost:4000/login";
+        var post_URL = "http://chefpp.herokuapp.com/login";
         var post_data = {username: username, password: password};
         $.post( post_URL,  post_data, function( data ) {
           console.log(data)
@@ -93,7 +93,7 @@ var demo = new Vue({
 
     // Updates internal variables to reflect the fact that the user has logged out
     logOut: function() {
-        var get_URL = "http://localhost:4000/signout";
+        var get_URL = "http://chefpp.herokuapp.com/signout";
         var vue_obj = this
        $.get(get_URL, function( data ) {
           vue_obj.username = '';
@@ -119,7 +119,7 @@ var demo = new Vue({
         return;
       }
 
-      var post_URL = "http://localhost:4000/signup";
+      var post_URL = "http://chefpp.herokuapp.com/signup";
       var post_data = {username: username, password: password};
       var vue_obj = this;
       $.post( post_URL, post_data, function( data ) {
