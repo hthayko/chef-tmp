@@ -22,7 +22,16 @@
   button:focus {
     outline: 0;
   }
-
+  .popup{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: grey;
+    opacity: 0.8;
+    z-index: 1;
+  }
   input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: #1c5f7a;
   }
@@ -32,7 +41,6 @@
 
 	nav{
     position: relative;
-    bottom: 2px;
 		display:flex;
     justify-content:space-around;
     align-items: center;
@@ -40,12 +48,10 @@
     margin-top: 0;
 		background-color: #1c5f7a;
     width: 100%;
-    border-bottom: 80px solid #e7e6dd;
-
 	}
   nav img{
-    height: 60px;
-    margin-right: 12%;
+    height: 40px;
+    margin-right: 6%;
     margin-left: 5%;
     margin-top: 1em;
     margin-bottom: 1em;
@@ -55,7 +61,7 @@
     padding: 2% 10px;
 		color: grey;
 		font-weight:bold;
-		font-size:25px;
+		font-size:20px;
 		text-decoration:none !important;
 		line-height:1;
 		text-transform: uppercase;
@@ -184,7 +190,7 @@
       margin:1em;
   }
 
-#homeWrapper h1{
+.resultsWrapper h1{
     width: 30%;
     margin-left: 5%;
     margin-right: auto;
@@ -257,6 +263,7 @@
 }
 
 .recipeBox{
+  position: relative;
   display: flex;
   flex-direction: column;
   width:30%;
@@ -265,6 +272,7 @@
   opacity: 0.8;
   border: 2px solid #1c5f7a;
 }
+
 
 .recipeBox:hover {
   opacity: 1;
@@ -302,27 +310,97 @@
   cursor: pointer;
 }
 
+.recipeBox .savebtn {
+  position: absolute;
+  top: 0%;
+  left: 100%;
+  transform: translate(-100%, 0%);
+  background-color: transparent;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  padding: 20px;
+  opacity: .75;
+  text-shadow: 2px 2px 4px #000;
+}
+
+.saved {
+  color: #1c5f7a;
+}
+
+.saved:hover {
+  color: #1c5f7a;
+  opacity: 1;
+}
+
+.unsaved {
+  color: white;
+}
+
+.unsaved:hover{
+  color: #1c5f7a;
+  opacity: 0.75;
+}
 
 /* Beginning of style for recipe input page */
-#recipe_input_view {
-  position: relative;
-  bottom: 5px;
+#recipe_input_view .chefpp_input{
   background-color: #e7e6dd;
-  height: -webkit-fill-available;
 }
 
 .recipe_input_wrapper {
-  margin: 40px 5px 10px;
+  margin: 10px 0 10px;
   display: flex;
   justify-content: center;
+  align-items: flex-start; 
 }
 
+#recipe_input_view  .recipe_input_wrapper .input_wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
+
+#recipe_input_view  .recipe_input_wrapper .input_wrapper input{
+  font-size: 15px;
+  text-indent: 0;
+  text-align: center;
+  margin: 0;
+  border: 1px solid white;
+}
+
+#recipe_input_view  .recipe_input_wrapper .input_wrapper #quantity{
+  width: 40%;
+}
+
+
+#recipe_input_view  .recipe_input_wrapper .input_wrapper #ingredient {
+  width: 48%;
+}
+#recipe_input_view  .recipe_input_wrapper .input_wrapper #instruction {
+  width: 89%;
+}
+
+#recipe_input_view  .recipe_input_wrapper .input_wrapper .chefpp-button {
+  margin: 0;
+  border: 1px solid white;
+  font-size: 20px;
+  padding: 0;
+  width: 10%;
+}
+
+.ingredients_list_wrapper {
+  margin-right: 2.5%
+}
+.instructions_list_wrapper {
+  margin-left: 2.5%
+}
 .ingredients_list_wrapper, .instructions_list_wrapper {
   display: flex;
   flex-direction: column;
-  width: 40%;
+  width: 35%;
   padding: 10px;
 }
+
 
 .ingredients_list_wrapper h1, .instructions_list_wrapper  h1 {
   text-align: left;
@@ -333,25 +411,25 @@
 .ingredients_list_item, .instructions_list_item{
   display: flex;
   justify-content: flex-start;
-  background-color: #e7e6dd;
   padding-bottom: 10px;
   color: #1c5f7a
 }
 
 .ingredients_list_item p, .instructions_list_item p {
-  font-size: 30px;
-  padding-left: 40px;
+  font-size: 20px;
+  padding-left: 1em;
   text-align: left;
+  color: #1c5f7a;
 }
 
 .exit_button {
   border: none;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
-  background-color: #e7e6dd;
-  color: #7d9098;
+  color: #1c5f7a;
   margin-right: 5px;
   margin-left: 5px;
+
 }
 
 .exit_button:hover {
@@ -370,8 +448,19 @@
   text-align: center;
   text-indent: 0;
   color: #1c5f7a;
-  margin: 0 10% 1em 10%;
-  box-shadow: 0 10px 8px #c4c4c4;
+  margin: 2em 10% 1em 10%;
+}
+
+#recipe_keywords {
+  margin-left: 10%;
+  margin-right: 2.5%;
+  width: 35%;
+}
+
+#recipe_total_time {
+  margin-right: 10%;
+  margin-left: 2.5%;
+  width: 35%;
 }
 
 .chefpp_input {
@@ -386,17 +475,42 @@
 
   border-radius: 2px;
   text-align: left;
-  font-size: 30px;
+  font-size: 20px;
   font-family: inherit;
   color: #1c5f7a;
-  font-weight: bold;
+  font-style: italic;
   outline: none;
+  padding: 0, 1em;
   text-indent: 40px;
 }
 
-.recipe_input_wrapper input {
+/*Opening page*/
+
+#opening_page {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   width: 100%;
 }
-
-
+.left{
+  margin:auto;
+}
+.right {
+  margin: auto;
+}
+#trout {
+  width: 680px;
+  height: 680px;
+  opacity: .8;
+  float: left;
+}
+#macbook {
+  margin-top: 100px;
+  height: 210px;
+  width: 340px;
+}
+.subtitle {
+  padding: 0 10%;
+  margin-top: 2em;
+}
 

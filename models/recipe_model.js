@@ -25,6 +25,11 @@ module.exports = {
     "LIMIT $1 " +
     "OFFSET $2";
     return DB.any(queryString, [limit, offset]);
-  }
+  },
+
+  addRecipe : (recipeInfo) => {
+    const queryString = "INSERT INTO recipe(${this:name})  VALUES(${this:csv}) RETURNING *;"
+    return DB.one(queryString, recipeInfo);
+  },
 }
 

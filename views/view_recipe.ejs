@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <title>Delish</title>
+  <title id='page-title'></title>
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet"> 
-  <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/stylesheets/view_recipe.css">
 </head>
@@ -22,9 +23,9 @@
     </form>
     </div>   
     <div class='stepcontainer' id='individual'>
-      <button class='btn' id='back'><</button>
+      <button class='btn' id='back'>&#10094</button>
       <div id='step_instructions_container'><p id='step_instructions'>the instructions</p></div>
-      <button class='btn' id='next'>></button>
+      <button class='btn' id='next'>&#10095</button>
     </div> 
     <div class='stepcontainer' id='list'>
       <ol class='listed-steps'></ol>
@@ -38,7 +39,7 @@
   <div id=timelinediv>
     <div id=headerstuff>
       <span id=recipename>recipe name</span>
-      <img src="../images/logos/SansSerifLogo-v2.png" id="logo">
+      <img src="../images/logos/SansSerifLogo-white.jpg" id="logo">
     </div>
     <div id=total-time-label>Total Time: 65 mins</div>
     <svg id=timeline>
@@ -47,7 +48,7 @@
           <rect id='pattern' width="4" height="8" transform="translate(0,0)" fill="rgb(200,200,200)"></rect> 
         </pattern>
         <pattern id="orange-stripe" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
-          <rect id='pattern' width="4" height="8" transform="translate(0,0)" fill="#ffa64d"></rect> 
+          <rect id='pattern' width="4" height="8" transform="translate(0,0)" fill="#64CECA"></rect> 
         </pattern>        
       </defs>
     </svg>

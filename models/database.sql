@@ -20,3 +20,23 @@ CREATE TABLE recipe(
   info VARCHAR,
   dish_image_url VARCHAR  
 );
+
+CREATE TABLE users(
+  ID SERIAL PRIMARY KEY,
+  name VARCHAR,
+  password VARCHAR,
+  username VARCHAR,
+  avatar VARCHAR,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  modified_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()  
+);
+
+CREATE TABLE ur(
+  ID SERIAL PRIMARY KEY,
+  user_id INTEGER,
+  recipe_id INTEGER,
+  is_active boolean,
+  created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now()
+);
+
+create unique index ur_user_id_recipe_id on ur(user_id, recipe_id);

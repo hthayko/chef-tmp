@@ -25,16 +25,20 @@ let stringToNumber = {
 }
 
 let recipe = window.recipe
+let k;
+for (k = 0; k < recipe.instructions.length; k++){
+  recipe.instructions[k].id = k;
+}
 
 //Constants/shared variables
 let arrowEndMargin = 10;
-let tlWidth = window.screen.width - (arrowEndMargin*2);
+let tlWidth = window.screen.width// - (arrowEndMargin*2);
 let tlHeight = 50;
 let tlSvgHeight = tlHeight + 20;
 let arrowMargin = 5;
-let widthThreshold = 30;
-let arrowTipX = 6.8;
+let arrowTipX = 8;
 let currStepId = 0;
+let DEFAULT_INSTRUCTION_TIME_IN_MINS = 2;
 
 let scaledWidths = getScaledWidths(recipe, tlWidth, arrowMargin);
 let xPositions = [];
@@ -44,10 +48,12 @@ main(function(){
 });
 
 function main(callback){
-  //Initial setup
+  //Initial page setup
   let title = recipe.caption;
   d3.select('#recipename')
       .text(title);
+  d3.select('#page-title')
+    .text(title + " - Chef + +");
   d3.select('#total-time-label')
       .text("Total Time: " + recipe.time);
   let tlSvg = d3.select('#timeline')
@@ -65,7 +71,7 @@ function main(callback){
   }
 
 
-
+  //Loads first step into view
   replaceStep();
 
   //Selected individual
@@ -112,63 +118,43 @@ function main(callback){
     .attr('class', 'listed-steps')
     .text(function(d){ return d.text; });
 
-  // //Add arrows to timeline
-  // let lastX = arrowEndMargin;
-  // tlSvg.selectAll('path')
-  //   .data(recipe.instructions)
-  //   .enter()
-  //   .append('path')
-  //   .style('fill', function(d){
-  //     if(d.active){
-  //       return 'rgb(200,200,200)';
-  //     } else {
-  //       return 'url(#gray-stripe)';
-  //     }
-  //   })
-  //   .attr('id', function(d){ return "path" + numberToString[d.id]; } )
-  //   .attr('d', function(d){
-  //     xPositions.push(lastX); 
-  //     let width = scaledWidths[d.id];
-  //     let pathStr = arrow(lastX, arrowMargin, width, tlHeight-(arrowMargin*2)); 
-  //     lastX += (width - arrowTipX) + arrowMargin;
-  //     return pathStr;
-  //   })
-  //   //Mouse events for hovering
-  //   .on("mouseover", function(d){
-  //     highlightArrow(d.id, numberToString[d.id]);
-  //   })
-  //   .on("mouseout", function(d){
-  //     unhighlightArrow(d.id, numberToString[d.id]);
-  //   });
+  //Add arrows to timeline
+  let lastX = arrowEndMargin;
+  tlSvg.selectAll('path')
+    .data(recipe.instructions)
+    .enter()
+    .append('path')
+    .style("fill",  function(d){
+      if (d.time === null){
+        return "url(#gray-stripe)";
+      }
+      return 'rgb(200,200,200)';      
+    })
+    .attr('id', function(d){ return "path" + numberToString[d.id]; } )
+    .attr('d', function(d){
+      xPositions.push(lastX); 
+      let width = scaledWidths[d.id];
+      let pathStr = arrow(lastX, arrowMargin, width, tlHeight-(arrowMargin*2)); 
+      lastX += (width - arrowTipX) + arrowMargin;
+      return pathStr;
+    })
+    //Mouse events for hovering
+    .on("mouseover", function(d){
+      highlightArrow(d.id, numberToString[d.id]);
+    })
+    .on("mouseout", function(d){
+      unhighlightArrow(d.id, numberToString[d.id]);
+    });
 
-  // //Add labels to arrows
-  // tlSvg.selectAll('text')
-  //   .data(recipe.instructions)
-  //   .enter()
-  //   .append('text')
-  //   .attr('id', function(d){ return 'text' + numberToString[d.id]; })
-  //   .text(function(d){ return d.action_word; })
-  //   .style('visibility', function(d){
-  //     if (scaledWidths[d.id] < widthThreshold){
-  //       return 'hidden';
-  //     }
-  //     return 'visible';
-  //   })
-  //   .attr('y', tlHeight+12)
-  //   .attr('font-family', 'Oswald')
-  //   .attr("font-size", "14px")
-  //   .attr("fill", "black");
-
-  // //Center text
-  // tlSvg.selectAll('text')
-  //   .attr('x', function(d){ return (xPositions[d.id] + (scaledWidths[d.id] - this.getComputedTextLength())/2); });
-
+  //Respond to key presses
+  //Next step: right arrow, space bar, enter. Prev step: left arrow
   d3.select("body")
     .on("keydown", function(){
-      if (d3.event.key !== 'Enter') d3.event.preventDefault();
-      if (d3.event.key ==='ArrowRight' && currStepId < recipe.instructions.length-1){
+      if ((d3.event.key ==='ArrowRight' || d3.event.key === ' ' || d3.event.key === 'Enter') && currStepId < recipe.instructions.length-1){
+        d3.event.preventDefault();
         goToNextStep();
       } else if (d3.event.key ==='ArrowLeft' && currStepId > 0){
+        d3.event.preventDefault();
         goToPrevStep();
       }
     });  
@@ -176,64 +162,52 @@ function main(callback){
 }
 
 /************ HELPER FUNCTIONS ******************/
+/* Transitions timeline arrows and changes step ID to update to next step */
 function goToNextStep(){
-  //unhighlightArrow(currStepId, numberToString[currStepId]);
+  unhighlightArrow(currStepId, numberToString[currStepId]);
   currStepId+=1;
   replaceStep();
-  //highlightArrow(currStepId, numberToString[currStepId]);  
+  highlightArrow(currStepId, numberToString[currStepId]);  
 }
 
+/* Transitions timeline arrows and changes step ID to go back a step */
 function goToPrevStep(){
-  //unhighlightArrow(currStepId, numberToString[currStepId]);
+  unhighlightArrow(currStepId, numberToString[currStepId]);
   currStepId-=1;
   replaceStep();
-  //highlightArrow(currStepId, numberToString[currStepId]);  
+  highlightArrow(currStepId, numberToString[currStepId]);  
 }
 
+/* Highlights arrow orange (with hatched pattern if no explicit time was extracted) */
 function highlightArrow(id, idStr){
   let pathIdStr = '#path'+idStr;
   d3.select(pathIdStr)
     .style("fill", function(d){
-      if (d.active){
-        return "#ffa64d";
+      if (d.time === null){
+        return "url(#orange-stripe)";
       }
-      return 'url(#orange-stripe)'
-    });
-  let textId = numberToString[id];
-  d3.select('#text'+textId)
-    .style('visibility', 'visible');  
+      return '#64CECA'; //formerly #ffa64d    
+    }); 
 }
 
+/* Unhighlights arrow by changing to gray (with hatched pattern if no explicit time was extracted) */
 function unhighlightArrow(id, idStr){
   let pathIdStr = '#path'+idStr;
-  let textId = numberToString[id];
-  if (scaledWidths[id] < widthThreshold){
-    d3.select('#text'+textId)
-      .transition()
-      .duration(250)
-      .style('visibility', 'hidden');
-  }
   d3.select(pathIdStr)
     .transition()
     .duration(250)
     .style("fill",  function(d){
-      if (d.active){
-        return "rgb(200,200,200)";
+      if (d.time === null){
+        return "url(#gray-stripe)";
       }
-      return 'url(#gray-stripe)'
+      return 'rgb(200,200,200)';      
     });
 }
 
+/* Replaces instruction text and handles button opacity to indicate whether user is at first/last step */
 function replaceStep(){
   d3.select('#step_instructions').text(recipe.instructions[currStepId].text);
-  let i;
-  // let ingredientIDs = recipe.instructions[currStepId].ingred_used;
-  // d3.selectAll('.ingredient-list')
-  //   .style('color', 'black');
-  // for (i=0; i<ingredientIDs.length; i++){
-  //   d3.select('#ingredient'+numberToString[ingredientIDs[i]]).style('color', '#ff8000');
-  // }
-
+  //Determine button opacity
   if (currStepId == recipe.instructions.length-1){
     d3.select('#next')
       .style('opacity', '.2');
@@ -251,30 +225,70 @@ function replaceStep(){
   }
 }
 
-// function formatIngredients(stepId){
-//     let ingrStr = '';
-//     let i;
-//     let ingredientIDs = recipe.instructions[stepId].ingred_used;
-//     for (i=0; i<ingredientIDs.length; i++){
-//       if (i == ingredientIDs.length && i != 0) ingrStr+='and ';
-//       let ingredient = recipe.ingredients[ingredientIDs[i]];
-//       ingrStr += ingredient.amount + ' ' + ingredient.name;
-//       if (i < ingredientIDs.length-1) ingrStr+=', ';
-//     }
-//     return ingrStr;
-// }
-
+/* Returns array of widths of pieces of the timeline scaled to the width of the screen */
 function getScaledWidths(recipe, tlWidth, arrowMargin){
   let widths = []
-  let totalTime = 60.0; //TODO: total time
-  let usableSpace = tlWidth;// - (arrowEndMargin); 
+  let parsedTimes = []
+  let totalTime = 0.0;
+  let usableSpace = tlWidth-(arrowEndMargin*2); 
   let i;
+  //Determines total time from extracted times
   for (i = 0; i < recipe.instructions.length; i++){
-      widths.push((totalTime/recipe.instructions.length)*usableSpace); //TODO: fix arrow
+    parsedTimeInMinutes = parseTime(recipe.instructions[i].time);
+    totalTime += parsedTimeInMinutes;
+    parsedTimes[i] = parsedTimeInMinutes; 
+  }
+  for (i = 0; i < recipe.instructions.length; i++){
+    widths.push((parsedTimes[i]/totalTime)*usableSpace); 
   }
   return widths;
 }
 
+/* Returns the number of minutes from extracted time text passed in */
+function parseTime(textToParse){
+  if (textToParse === null){
+    return DEFAULT_INSTRUCTION_TIME_IN_MINS;
+  }
+  let substringArray = textToParse.split(" ");
+  let numericalTime = getNumericalTime(substringArray);
+  //Scale time to be in minutes
+  let timeInMinutes = 0;
+  let timeFormat = substringArray[substringArray.length-1]
+  switch(timeFormat){
+    case "minute":
+    case "minutes":
+      timeInMinutes = numericalTime;
+      break;
+    case "hour":
+    case "hours":
+      timeInMinutes = numericalTime*60;
+      break;
+    case "second":
+    case "seconds":
+      timeInMinutes = 1; //round up any step given in seconds
+      break;
+  }
+  return timeInMinutes;
+  
+}
+
+/* Parses the number from the string with time information */
+function getNumericalTime(substringArray){
+  let time = 0;
+  let rangePresent = substringArray.indexOf("to");
+  if (rangePresent !== -1){ 
+    //Averages a time range if present ("12 to 17 minutes" ==> 14.5)
+    let lowerbound = parseInt(substringArray[rangePresent-1]);
+    let upperbound = parseInt(substringArray[rangePresent+1]);
+    time = upperbound - (upperbound-lowerbound)/2;
+  } else {
+    //Extraction guarantees time will be 2nd element from the end, even if "about 5 minutes"
+    time = parseInt(substringArray[substringArray.length-2]);
+  }
+  return time;
+}
+
+/* Constructs path string for the timeline arrow */
 function arrow(x, y, width, height) {
   let arrowTipY = height/2;
   let str = "M " + x + " " + y

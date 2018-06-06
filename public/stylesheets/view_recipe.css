@@ -8,11 +8,14 @@
   float: left;
   width:5%;
   margin: 165px 10px 155px 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   text-align: center;
+  font-size:40px;
 }
 
 .stepcontainer {
-  font-family: Oswald;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .listed-steps{
@@ -26,7 +29,7 @@
   counter-increment: step-counter;
   margin-bottom: 7px;
   margin-left: 10px;
-  font-size: 17px;
+  font-size: 16px;
   text-indent: -29px;
 }
 
@@ -34,7 +37,7 @@
   content: counter(step-counter);
   margin-right: 5px;
   font-size: 15px;
-  background-color: #ffa64d;
+  background-color: #64CECA; /*formerly #ffa64d*/
   color: white;
   font-weight: bold;
   padding: 3px 8px;
@@ -67,21 +70,23 @@
   float:left;
   width:890px;
   height:360px;
-  font-size: 36px;
+  font-size: 30px;
 }
 
 #ingredients{
-  height:100%;
   position: fixed;
+  overflow-y: auto;
   width: 200px;
+  height:72%;
   top:160px;
   left:0;
-  font-family: Oswald;
+  font-family: 'Open Sans', sans-serif;
   background-color: #F5F5F5;
 }
 
 .ingredient-list{
   margin: 5px 5px 0px 10px;
+  font-size: 14px;
 }
 
 #ingr-title {
@@ -91,7 +96,7 @@
 }
 
 #section-title {
-  font-family: Oswald;
+  font-family: 'Open Sans', sans-serif;
   font-size: 24px;
   font-weight: bold;
   margin: 10px 0px 10px 10px;
@@ -103,15 +108,18 @@
   top:160px;
   left:215px;
   background-color: white;
-  height: 415px;
-}
+/*  height: 415px;
+*/
+  height:72%;}
 #headerstuff {
   margin: 10px 10px 0px 10px;
 }
 
 #recipename {
-  font-size: 45px;
-  font-family: 'Luckiest Guy', cursive;
+  font-size: 35px;
+  font-family: 'Montserrat', san-serif;
+  font-weight: 900;
+  font-style: italic;
 }
 
 #timelinediv{
@@ -142,7 +150,7 @@
   float: right;
   margin-right: 15px;
   margin-left: 15px;
-  font-family: Oswald;
+  font-family: 'Open Sans', sans-serif;
 }
 
 #next {
@@ -157,11 +165,12 @@
   font-family:Arial;
   font-size:15px;
   font-weight:bold;
-  padding:6px 24px;
+  /*padding:6px 24px;*/
   text-decoration:none;
 }
 #next:hover {
   background-color:#1D607B; /*dark color*/
+  border:1px solid #1D607B;
 }
 
 #back {
@@ -176,7 +185,7 @@
   font-family:Arial;
   font-size:15px;
   font-weight:bold;
-  padding:6px 24px;
+  /*padding:6px 24px;*/
   text-decoration:none;
 }
 
@@ -195,7 +204,7 @@
 }
 
 .switch-field {
-  font-family: Oswald;
+  font-family: 'Open Sans', sans-serif;
   overflow: hidden;
   float:left;
   margin-left: 10px;
@@ -221,8 +230,8 @@
   width: 70px;
   background-color: #e4e4e4;
   color: rgba(0, 0, 0, 0.6);
-  font-size: 15px;
-  font-weight: normal;
+  font-size: 14px;
+  font-weight: bold;
   text-align: center;
   text-shadow: none;
   padding: 6px 14px;
@@ -241,14 +250,14 @@
 .switch-field input:checked + label {
   background-color: #64CECA/*#A5DC86*/; /*light color*/
   font-style: normal;
-    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .switch-field label:first-of-type {
-  border-radius: 4px 4px 4px 4px;
+  /*border-radius: 4px 4px 4px 4px;*/
 }
 
 .switch-field label:last-of-type {
-  border-radius: 4px 4px 4px 4px;
+  /*border-radius: 4px 4px 4px 4px;*/
 }

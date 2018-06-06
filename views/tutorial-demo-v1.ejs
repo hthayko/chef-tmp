@@ -7,19 +7,19 @@
   <title>Chef ++</title>
 
   <link rel="stylesheet" type="text/css" href="stylesheets/demo.css">
-
-  <style>
-
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
 
 </head>
 <body>
 
   <div id="main">
+
+    <!-- NAV BAR -->
     <nav v-bind:class="active" v-on:click.prevent>
 
       <img src="images/logos/SansSerifLogo-v2.png" id="delishlogo">
-      <div v-if="loggedIn === 'true'" > 
+      <div v-if="user !== null" > 
         <a href="#" class="home" v-on:click="makeActive('home')">Home</a>
         <a href="#" class="search" v-on:click="makeActive('search')">Search</a>
         <a href="#" class="rawInput" v-on:click="makeActive('rawInput')">Recipe Input</a>
@@ -32,18 +32,52 @@
       </div>
     </nav>
 
-    <div id="homeWrapper" v-if="active === 'home'">
+    <!-- HOME PAGE VIEW WHEN LOGGED IN -->
+
+    <div id="homeWrapper" class="resultsWrapper" v-if="active === 'home'">
       <h1>Popular</h1>      
       <div class="recipeResultsWrapper">
-        <div v-for="recipe in favRecipes" class='recipeBox'>
+        <div v-for="recipe in popularRecipes" class='recipeBox'>
           <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
+          <p >{{recipe.caption}}</p>
+          <button v-if="savedRecipeIds.indexOf(recipe.id) < 0" v-bind:id="'home'+recipe.id" 
+                  v-on:click='clickBookmark("home", recipe)' class="savebtn unsaved">
+          <i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+          </button>
+          <button v-else v-bind:id="'home'+recipe.id" 
+                  v-on:click='clickBookmark("home", recipe)' class="savebtn saved">
+          <i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+          </button>          
+        </div>
+      </div>
+<!-- v-bind:class="savedRecipes.indexOf(recipe) > -1 ? 'saved' : 'unsaved'" -->
+    </div>
+
+    <!-- SAVED RECIPES -->
+
+    <div id="savedRecipesWrapper" class="resultsWrapper" v-if="active === 'savedRecipes'">
+      <h1>Your Saved Recipes</h1>      
+      <div class="recipeResultsWrapper">
+        <div v-for="recipe in savedRecipes" class='recipeBox'> <!-- TODO replace the list with saved --> 
+
+          <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
+
+          <button v-bind:id="'save' + recipe.id" v-on:click='clickBookmark("save", recipe)' class="savebtn saved"><i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+          </button>
           <p >{{recipe.caption}}</p>
         </div>
       </div>
 
     </div>
 
+    <!-- SEARCH VIEW -->
+
     <div v-else-if="active === 'search'">
+      <div class="popup" v-if="popup">
+        <ol id="popup_ingredient_list">
+          <li v-for="ingredient in popup_ingredients">{{ingredient}}</li>
+        </ol>
+      </div>
       <div id=search_wrapper>
         <button class="chefpp-button" v-on:click="searchForRecipes()">Search</button>
         <div class="bar">
@@ -64,24 +98,43 @@
       <h1 class="search-results-label" v-if="searchedRecipes && searchedRecipes.length === 0 ">No Results</h1>
       <div class="recipeResultsWrapper">
         <div v-for="recipe in searchedRecipes" class='recipeBox'>
-            <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
-            <p >{{recipe.caption}}</p>
+
+            <a  v-on:click="activate_popup(recipe)">
+              <img v-bind:src="recipe.dish_image_url" />
+            </a>          
+            <p>{{recipe.caption}}</p>
+            <button v-if="savedRecipeIds.indexOf(recipe.id) < 0" v-bind:id="'home'+recipe.id" 
+                  v-on:click='clickBookmark("home", recipe)' class="savebtn unsaved">
+            <i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+            </button>
+            <button v-else v-bind:id="'home'+recipe.id" 
+                    v-on:click='clickBookmark("home", recipe)' class="savebtn saved">
+            <i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+            </button>  
         </div>
       </div>
     </div>
 
+    <!-- RECIPE INPUT VIEW -->
    
    <div id="recipe_input_view" v-else-if="active === 'rawInput'">
     <input type="text" class="chefpp_input" id="recipe_name" v-model="recipe_name" placeholder="Recipe Name">
+    <input type="text" class="chefpp_input" id="recipe_keywords" v-model="recipe_keywords_input" placeholder="Keywords (e.g. burgers, thai, dessert)">
+    <input type="text" class="chefpp_input" id="recipe_total_time" v-model="recipe_total_time" placeholder="Estimated Total Time">
     <div class="recipe_input_wrapper">
 
-      <div class="ingredients_list_wrapper" >
+      <div class="ingredients_list_wrapper" > 
         <h1>Ingredients</h1>
         <div class="ingredients_list_item" v-for="ingredient in ingredients">
           <button class=exit_button v-on:click="removeIngredient(ingredient)">X</button>
-          <p>{{ingredient}}</p>
+          <p>{{ingredient.quantity}} {{ingredient.unit}} {{ingredient.text}}</p>
         </div>
-        <input type="text" class=chefpp_input v-model="ingredient_input" v-on:keyup.enter="addIngredient()" >
+        <div class="input_wrapper">
+          <input type="text" class="chefpp_input" id="quantity" v-model="quantity_input" v-on:keyup.enter="addIngredient()" placeholder="quantity">
+          <input type="text" class="chefpp_input" id="ingredient" class=ingredient v-model="ingredient_input" 
+          v-on:keyup.enter="addIngredient()" placeholder="name">
+          <button class=chefpp-button v-on:click="addIngredient()">+</button>
+        </div>  
       </div>
 
       <div class="instructions_list_wrapper">
@@ -90,49 +143,64 @@
           <button class=exit_button v-on:click="removeInstruction(instruction)">X</button>
           <p>{{instruction}}</p>
         </div>
-        <input type="text" class=chefpp_input v-model="instruction_input" v-on:keyup.enter="addInstruction()" >
+
+        <div class="input_wrapper">
+          <input type="text" class=chefpp_input id="instruction" v-model="instruction_input" v-on:keyup.enter="addInstruction()"
+          placeholder="One per Line">
+          <button class=chefpp-button v-on:click="addInstruction()">+</button>
+        </div>
       </div>
 
     </div>
     <div>
     </div>
-    <input type="button" onclick="location.href='http://web.stanford.edu/~kramerh/delish/index.html';" value="Submit" class="chefpp-button"/>
+    <button class="chefpp-button" v-on:click="submitRecipe()" >Submit</button>
   </div>
 
+  <!-- CREATE ACCOUNT/SIGN UP VIEW -->
 
-   <div v-else-if="active === 'createAccount'">
-      <div class="info">
-       <input type="text" v-model="username" placeholder="Username" />
-       <input type="password" v-model="password" placeholder="Password" />
-       <input type="password" v-model="password_confirm" placeholder="Confirm your password" />
-     </div>
-     <form>
-       <button class="chefpp-button" v-on:click="createAccount(username, password, password_confirm, $event)">Submit</button>
-     </form>
+   <div class="info" v-else-if="active === 'createAccount'">
+    <input type="text" v-model="username" placeholder="Username" />
+    <input type="password" v-model="password" placeholder="Password" />
+    <input type="password" v-model="password_confirm" placeholder="Confirm your password" />
+    <div>
+      <button class="chefpp-button" v-on:click="createAccount($event)">Submit</button>
     </div>
+   <p>{{login_error_message}}</p>
+  </div>
 
-
+  <!-- LOG IN/SIGN IN VIEW -->
 
   <div class="info" v-else-if="active==='login'">
      <input type="text" v-model="username" placeholder="Username" />
      <input type="password" v-model="password" placeholder="Password" />
-   <form>
-     <button class="chefpp-button" v-if="loggedIn === 'false'" v-on:click="logIn(username, $event)">Log in</button>
-     <button class="chefpp-button" v-if="loggedIn === 'false'" v-on:click="makeActive('createAccount')">Create Account</button>
-   </form>
+   <div>
+     <button id='login-button' class="chefpp-button" v-on:click="logIn($event)">Log in</button>
+     <button class="chefpp-button" v-on:click="makeActive('createAccount')">Create Account</button>
+   </div>
+   <p>{{login_error_message}}</p>
  </div>
 
- <div v-else-if="active==='opening_page'">
-    <h1> The new way to learn how to make great meals </h1>
-    <h3> When you're first learning how to cook, long blocks of text can be intimidating and hard to follow. We feelthat learning to cook should be as painless as possible, so we reshaped how you work through a recipe. Now you won't be able to wait to cook your next meal! </h3>
- </div>
+
+ <!-- LANDING/OPENING PAGE VIEW WHEN NOT LOGGED IN -->
+
+ <div id = "opening_page" v-else-if="active ==='opening_page'">
+  <div class = "left">
+    <img id="trout" src="images/pictures/trout.jpg">
+  </div>
+  <div class = "right">
+    <h1 class = "title"> The new way to learn how to make great meals </h1>
+    <h3 class = "subtitle"> When you're first learning how to cook, long blocks of text can be intimidating and hard to follow. We feel that learning to cook should be as painless as possible, so we reshaped how you work through a recipe. Now you won't be able to wait to cook your next meal! </h3>
+    <img id = "macbook" src="images/pictures/macbook-display.jpg">
+  </div>
 </div>
 
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.0/vue.min.js"></script>
-<script >  window.favRecipes = <%- recipes %> </script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script >  window.popularRecipes = <%- recipes %> </script>
+<script >  window.user = <%- user %> </script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src='javascripts/demo.js'></script>
 
 </body>

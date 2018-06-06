@@ -1,7 +1,8 @@
+var baseURL = "http://localhost:4000"
 
 var demo = new Vue({
-	el: '#main',
-	data: {
+  el: '#main',
+  data: {
     active: localStorage.getItem('cpp_active_page'), // Controls which page is currently being viewed
 
     // This section is for the search page
@@ -9,63 +10,136 @@ var demo = new Vue({
     categories: ["American", "Chinese", "Japanese", "Italian", "Mexican", "Thai", 
                   "Korean", "Spanish", "Greek", "Seafood", "Vegetarian"],
     searchedRecipes: null,
+    savedRecipes: [],
+    savedRecipeIds: [],
+    popup: false,
+    popup_ingredients: [],
 
     // This section is for variables related to log in/log out
     username: '',
     password: '',
     password_confirm: '',
-    loggedIn: localStorage.getItem('cpp_loggedIn'), // Marks whether a user is logged in or not
 
     // This section is for the manual recipe input page
     recipe_name: "",
-    ingredients: [],
-    instructions: [],
+    recipe_keywords_input: "",
+    recipe_total_time: "",
+    quantity_input: "",
     ingredient_input: "",
+    ingredients: [],
     instruction_input: "",
+    instructions: [],
 
-    favRecipes: favRecipes // These are the recipes that are displayed in the home view (under Popular)
-	},
+
+    popularRecipes: popularRecipes, // These are the recipes that are displayed in the home view (under Popular)
+    // account_response: accountResponse, // This is the response to control error/success messages on login. 
+    login_error_message: "",
+    user: localStorage.getItem('user')
+
+  },
   computed: {
   },
+
+  // Called before each refresh/reload
+  beforeMount(){
+
+      // If they are not logged in, and there is no defined page, we load the default landing page
+    if (this.active === null) {
+      this.makeActive('opening_page');
+    }
+
+    else if(this.active === 'savedRecipes' || this.active === 'home' || this.active === 'search'){
+      this.getSaved();
+    }  
+  },
+
   methods: {
 
+    
     // Updates the |active| variable (in the data section above) which controls the 
     // tab that the user is currently viewing (i.e. sign in/search/home/recipe input etc)
     makeActive: function(item){
-      this.active = item
+      if (item === 'savedRecipes' || 'search' || 'home'){
+          this.getSaved();
+      }
+      this.active = item;
       localStorage.setItem('cpp_active_page', item)
     },
 
     // Updates internal variables to reflect the fact that the user has logged in
-    logIn: function(userName, event) {
-        event.preventDefault();
-        this.username = userName
-        this.loggedIn = 'true'
-        localStorage.setItem('cpp_loggedIn', 'true')
-        this.makeActive('home')
+    logIn: function(event) {
+        var password = this.password;
+        var username = this.username;
+        var vue_obj = this;
+
+        if($.trim(username) === "" || $.trim(password) === ""){
+          this.login_error_message = "Required field left empty.";
+          return;
+        }
+
+        var post_URL = "http://localhost:4000/login";
+        var post_data = {username: username, password: password};
+        $.post( post_URL,  post_data, function( data ) {
+          console.log(data)
+          if(data.mes[0] == "success"){
+            vue_obj.makeActive("home")
+            vue_obj.user = data.user
+            localStorage.setItem('user',  data.user)
+          } else {
+            vue_obj.login_error_message = data.mes[0];  
+          }
+        });
     },
 
     // Updates internal variables to reflect the fact that the user has logged out
     logOut: function() {
-        this.loggedIn = 'false'
-        localStorage.setItem('cpp_loggedIn', 'false')
-        this.username = ''
-        this.password = ''
-        this.makeActive('opening_page')
+        var get_URL = "http://localhost:4000/signout";
+        var vue_obj = this
+       $.get(get_URL, function( data ) {
+          vue_obj.username = '';
+          vue_obj.password = '';
+          vue_obj.makeActive('opening_page');
+          vue_obj.user = null;
+          localStorage.removeItem('user')
+        });
     },
 
     // Handles the account creation interaction with backend
-    createAccount: function(userName, password, password_confirm, event) {
-      // TODO: Add user to database
+    createAccount: function(event) {
+
+      var username = this.username
+      var password = this.password
+      var password_confirm = this.password_confirm
+      if($.trim(password) === "" || $.trim(password) === "" || $.trim(password_confirm) === "" ){
+          this.login_error_message = "Required field left empty.";
+          return;
+      }
+      if(password !== password_confirm){
+        this.login_error_message = "Pasword and Password Confirmation must match.";
+        return;
+      }
+
+      var post_URL = "http://localhost:4000/signup";
+      var post_data = {username: username, password: password};
+      var vue_obj = this;
+      $.post( post_URL, post_data, function( data ) {
+        console.log(data)
+        if(data.mes[0] == "success"){
+          vue_obj.makeActive("home")
+          vue_obj.user = data.user
+          localStorage.setItem('user',  data.user)
+        } else {
+          vue_obj.login_error_message = data.mes[0];  
+        }          
+      });
       
-      // Log in user
-      this.logIn(userName, event);
     },
 
     // Handles the logic for adding an instruction to the instructions list for 
     // Manual instruction input
     addInstruction: function() {
       var str = this.instruction_input
+      if (str === '') return;
       str = str.charAt(0).toUpperCase() + str.slice(1);
       this.instructions.push(str)
       this.instruction_input = ""
@@ -75,9 +149,17 @@ var demo = new Vue({
     // Manual ingredient input
     addIngredient: function() {
       var str = this.ingredient_input
+      if (str === '') return;
       str = str.charAt(0).toUpperCase() + str.slice(1);
-      this.ingredients.push(str)
-      this.ingredient_input = ""
+      var ingredient = {
+                        quantity: this.quantity_input, 
+                        unit: this.unit_input, 
+                        text: str
+                      };
+      this.ingredients.push(ingredient);
+      this.ingredient_input = "";
+      this.unit_input = "";
+      this.quantity_input = "";
     },
 
     // Deletes an instruction from the list of input instructions on the 
@@ -98,47 +180,102 @@ var demo = new Vue({
       }
     },
 
+    submitRecipe: function(){
+      // TODO: Delete this comment after implemeting method
+      // RELEVANT variables: 
+      // ===========
+      // recipe_name
+      // recipe_keywords_input
+      // recipe_keywords
+      // recipe_total_time
+      // ingredients
+      // instructions
+      console.log("submitted recipe")
+      // TODO: Fill in with backend
+    },
+
+    //SAVED RECIPES
+    getSaved: function(){
+      console.log("get saved")
+      var get_URL = baseURL + "/api/getSaved";
+      page = this;
+      var savedRecipeIds = [];
+      $.getJSON( get_URL, function( savedRecipesResponse ) {
+        console.log("recipe response:");
+        console.log(savedRecipesResponse);
+        for (var i=0; i < savedRecipesResponse.length; i ++){
+          if (savedRecipesResponse[i].dish_image_url === null){
+            savedRecipesResponse[i].dish_image_url = '../images/default-missing-photo.png'
+          }
+          // d3.select('#home1').style("class", 'savebtn saved');  this doesn't work
+          savedRecipeIds.push(savedRecipesResponse[i].id);
+        }
+        page.savedRecipes = savedRecipesResponse;
+        page.savedRecipeIds = savedRecipeIds;
+        console.log(savedRecipeIds);
+      });      
+    },
+
+    clickBookmark: function(origin, recipe){
+      console.log("clicked bookmark " + recipe.id);
+      page = this;
+      var get_URL = baseURL + "/api/getSaved";
+      var savedRecipeIds = [];
+        
+      var post_data = {recipe_id: recipe.id};     
+      if (page.savedRecipeIds.indexOf(recipe.id) === -1){
+        //not saved - want to add 
+        console.log('saving')
+        d3.select('#'+origin+recipe.id).attr("class", 'savebtn saved');
+        var save_post_URL = baseURL + "/api/addSaved";
+        $.post( save_post_URL,  post_data, function( data ) {
+          page.savedRecipeIds.push(recipe.id);
+          console.log("posted "+ recipe.id);
+        });        
+      } else {
+        //not saved - want to remove
+        d3.select('#'+origin+recipe.id).attr("class", 'savebtn unsaved');
+        var remove_post_URL = baseURL + "/api/removeSaved";
+        $.post( remove_post_URL,  post_data, function( data ) {
+          var indexToRemove = page.savedRecipeIds.indexOf(recipe.id);
+          page.savedRecipeIds.splice(indexToRemove, 1);
+          console.log("removed "+ recipe.id);
+        });                
+      }      
+         
+    },
+
     // Implements the call to the backend when the user hits enter or search on the 
     // Search page
-    searchForRecipes(searchString=""){
+    searchForRecipes: function(searchString=""){
       if (searchString === ""){
         searchString = this.searchString.trim().toLowerCase();
       }
       var numberOfRecipes = "21";
       var offset = "0";
-      var get_url = "http://chefpp.herokuapp.com/api/search?term=" + searchString 
+      var get_URL = baseURL + "/api/search?term=" + searchString 
                       + "&limit=" + numberOfRecipes + "&offset=" + offset;
-
       page = this;
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-          var recipes = JSON.parse(this.response);
-          for (var i=0; i < recipes.length; i ++){
-            if (recipes[i].dish_image_url === null){
-              recipes[i].dish_image_url = '../images/default-missing-photo.png'
-            }
+
+
+      $.getJSON( get_URL, function( recipes ) {
+        for (var i=0; i < recipes.length; i ++){
+          if (recipes[i].dish_image_url === null){
+            recipes[i].dish_image_url = '../images/default-missing-photo.png'
           }
-          page.searchedRecipes = recipes
         }
-        else if (this.status != 200 && this.status != 0){
-          console.log("ERROR when requesting recipes with search term: response code ", this.status);
-        }
-      };
-      xhttp.open("GET", get_url, true);
-      xhttp.send();
+        page.searchedRecipes = recipes
+      });
+
+    },
+
+    activate_popup: function(recipe){
+      for(var i = 0; i < recipe.ingredients.length; i ++){
+        var str = (recipe.ingredients[i].quant + " " + recipe.ingredients[i].text);
+        this.popup_ingredients.push(str);
+      }
+      this.popup=true
     }
   }
 });
 
-$( document ).ready(function() {
-  // If there is no value stored for logged in, we set it to false 
-  if (localStorage.getItem('cpp_loggedIn') === null){
-    localStorage.setItem('cpp_loggedIn', 'false');
-  }
-
-  // If they are not logged in, we load the default landing page
-  if (localStorage.getItem('cpp_loggedIn') === 'false') {
-    localStorage.setItem('cpp_active_page', 'opening_page');
-  }
-});

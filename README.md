@@ -1,5 +1,4 @@
 <img src="public/images/logos/SansSerifLogo-v2.png">
-<img src="public/images/logos/SansSerifLogo2-v1.png">
 
 More and more people are interacting with recipes online instead of in print, but the layout and structure of recipes hasn't evolved along with the growth of technology. Chefs of all levels often want to be able to view and interact with an interface that is simple, and easy to navigate. When viewing on a device, simple web interaction can make following along even easier than reading text off of a page. We're excited to explore a platform that would bring thousands of recipes into one easy-to-view layout that makes cooking a seamless and fun experience.
 
