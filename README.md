@@ -30,5 +30,5 @@ Hayk | AI + ML, Data Science, Databases, design of robust software | logical, fr
 1) Can reach us at our individual Stanford emails
 2) <a href="https://drive.google.com/drive/u/1/folders/0AAAy28smR17cUk9PVA">Google Drive</a>
 3) Task board via <a href="https://trello.com/b/5pOkpNTE/chef">Trello</a>
-4) Demo site <a href="https://chefpp.herokuapp.com/demo">here</a>.
+4) Demo site <a href="https://chefpp.herokuapp.com">here</a>.
 

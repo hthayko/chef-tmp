@@ -1,54 +1,86 @@
 
-	*{
-		margin:0;
-		padding:0;
-	}
+  *{
+    margin:0;
+    padding:0;
+  }
 
-	body{
-		font:15px/1.3 'Open Sans', sans-serif;
-		color: #5e5b64;
-		text-align:center;
-	}
+  body{
+    font:15px/1.3 'Open Sans', sans-serif;
+    color: #5e5b64;
+    text-align:center;
+  }
 
-	a, a:visited {
-		outline:none;
-	}
+  a, a:visited {
+    outline:none;
+  }
 
-	a:hover{
-		text-decoration:none;
-	}
+  a:hover{
+    text-decoration:none;
+  }
 
   /* Removes blue outline from buttons*/
   button:focus {
     outline: 0;
   }
-  .popup{
+
+  #popup{
+    display:flex;
     position: absolute;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
+    opacity: .9;
     background-color: grey;
-    opacity: 0.8;
     z-index: 1;
   }
+
   input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: #1c5f7a;
   }
-	section, footer, header, aside, nav{
-		display: block;
-	}
+  section, footer, header, aside, nav{
+    display: block;
+  }
 
-	nav{
+  #popup_ingredient_list {
+    width:40%;
+    margin:auto;
+    margin-top:10%;
+    padding: 2%;
+    text-align:center;
+    background-color: white;
+  }
+
+  .chefpp-popup-button {
+    padding:0.2em;
+    background-color: #1c5f7a;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-line: underline;
+    text-decoration-style: initial;
+    text-decoration-color: initial;
+  }
+
+  .chefpp-button:hover{
+    background-color: #5ec5c0;
+    cursor: pointer;
+  }
+
+  nav{
     position: relative;
-		display:flex;
+    display:flex;
     justify-content:space-around;
     align-items: center;
-		margin: auto;
+    margin: auto;
     margin-top: 0;
-		background-color: #1c5f7a;
+    background-color: #1c5f7a;
     width: 100%;
-	}
+  }
   nav img{
     height: 40px;
     margin-right: 6%;
@@ -57,57 +89,57 @@
     margin-bottom: 1em;
   }
 
-	nav a{
+  nav a{
     padding: 2% 10px;
-		color: grey;
-		font-weight:bold;
-		font-size:20px;
-		text-decoration:none !important;
-		line-height:1;
-		text-transform: uppercase;
-		background-color:transparent;
+    color: grey;
+    font-weight:bold;
+    font-size:20px;
+    text-decoration:none !important;
+    line-height:1;
+    text-transform: uppercase;
+    background-color:transparent;
     margin-bottom: 0;
     margin-top: 0;
 
-		-webkit-transition:color 0.25s;
-		-moz-transition:color 0.25s;
-		transition:color 0.25s;
-	}
+    -webkit-transition:color 0.25s;
+    -moz-transition:color 0.25s;
+    transition:color 0.25s;
+  }
 
   nav a:hover{
     color: white;
   }
 
-	nav.home .home,
-	nav.rawInput .rawInput,
-	nav.search .search,
-	nav.about .about,
+  nav.home .home,
+  nav.rawInput .rawInput,
+  nav.search .search,
+  nav.about .about,
   nav.savedRecipes .savedRecipes,
   nav.login .login,
   nav.createAccount .createAccount{
-		color: white;
-	}
+    color: white;
+  }
 
-	p{
-		font-size:22px;
-		font-weight:bold;
-		color: #7d9098;
-	}
+  p{
+    font-size:22px;
+    font-weight:bold;
+    color: #7d9098;
+  }
 
   h1 {
     font-size: 25px;
     color: #1c5f7a;
   }
 
-	p b{
-		color:#ffffff;
-		display:inline-block;
-		padding:5px 10px;
-		background-color: #c4d7e0;
-		border-radius:2px;
-		text-transform:uppercase;
-		font-size:18px;
-	}
+  p b{
+    color:#ffffff;
+    display:inline-block;
+    padding:5px 10px;
+    background-color: #c4d7e0;
+    border-radius:2px;
+    text-transform:uppercase;
+    font-size:18px;
+  }
 
   .chefpp-button {
     padding: 0.5em;

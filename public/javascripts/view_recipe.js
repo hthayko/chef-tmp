@@ -80,14 +80,14 @@ function main(callback){
       d3.select('#list')
         .style('display', 'none');
       d3.select('#individual')
-        .style('display', 'block');
+        .style('display', 'flex');
     });
 
   //Selected list
   d3.select('#switch_right')
     .on('click', function(){
       d3.select('#list')
-        .style('display', 'block');
+        .style('display', 'flex');
       d3.select('#individual')
         .style('display', 'none');    
     });

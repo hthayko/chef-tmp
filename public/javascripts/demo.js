@@ -7,12 +7,13 @@ var demo = new Vue({
 
     // This section is for the search page
     searchString: '', // in the search page, controlls what is searched for
-    categories: ["American", "Chinese", "Japanese", "Italian", "Mexican", "Thai", 
-                  "Korean", "Spanish", "Greek", "Seafood", "Vegetarian"],
+    categories: ["American", "French", "Mexican", "Asian", "Italian", "Greek",
+                  "Breakfast", "Dessert", "Chicken", "Vegetarian", "Seafood"],
     searchedRecipes: null,
     savedRecipes: [],
     savedRecipeIds: [],
     popup: false,
+    popup_recipe_time: "",
     popup_ingredients: [],
 
     // This section is for variables related to log in/log out
@@ -32,9 +33,9 @@ var demo = new Vue({
 
 
     popularRecipes: popularRecipes, // These are the recipes that are displayed in the home view (under Popular)
-    // account_response: accountResponse, // This is the response to control error/success messages on login. 
+    // account_response: accountResponse, // This is the response to control error/success messages on login.
     login_error_message: "",
-    user: localStorage.getItem('user')
+    user: window.user
 
   },
   computed: {
@@ -50,13 +51,13 @@ var demo = new Vue({
 
     else if(this.active === 'savedRecipes' || this.active === 'home' || this.active === 'search'){
       this.getSaved();
-    }  
+    }
   },
 
   methods: {
 
-    
-    // Updates the |active| variable (in the data section above) which controls the 
+
+    // Updates the |active| variable (in the data section above) which controls the
     // tab that the user is currently viewing (i.e. sign in/search/home/recipe input etc)
     makeActive: function(item){
       if (item === 'savedRecipes' || 'search' || 'home'){
@@ -84,9 +85,8 @@ var demo = new Vue({
           if(data.mes[0] == "success"){
             vue_obj.makeActive("home")
             vue_obj.user = data.user
-            localStorage.setItem('user',  data.user)
           } else {
-            vue_obj.login_error_message = data.mes[0];  
+            vue_obj.login_error_message = data.mes[0];
           }
         });
     },
@@ -100,7 +100,6 @@ var demo = new Vue({
           vue_obj.password = '';
           vue_obj.makeActive('opening_page');
           vue_obj.user = null;
-          localStorage.removeItem('user')
         });
     },
 
@@ -127,15 +126,14 @@ var demo = new Vue({
         if(data.mes[0] == "success"){
           vue_obj.makeActive("home")
           vue_obj.user = data.user
-          localStorage.setItem('user',  data.user)
         } else {
-          vue_obj.login_error_message = data.mes[0];  
-        }          
+          vue_obj.login_error_message = data.mes[0];
+        }
       });
-      
+
     },
 
-    // Handles the logic for adding an instruction to the instructions list for 
+    // Handles the logic for adding an instruction to the instructions list for
     // Manual instruction input
     addInstruction: function() {
       var str = this.instruction_input
@@ -145,15 +143,15 @@ var demo = new Vue({
       this.instruction_input = ""
     },
 
-    // Handles the logic for adding an ingredient to the ingredients list for 
+    // Handles the logic for adding an ingredient to the ingredients list for
     // Manual ingredient input
     addIngredient: function() {
       var str = this.ingredient_input
       if (str === '') return;
       str = str.charAt(0).toUpperCase() + str.slice(1);
       var ingredient = {
-                        quantity: this.quantity_input, 
-                        unit: this.unit_input, 
+                        quantity: this.quantity_input,
+                        unit: this.unit_input,
                         text: str
                       };
       this.ingredients.push(ingredient);
@@ -162,7 +160,7 @@ var demo = new Vue({
       this.quantity_input = "";
     },
 
-    // Deletes an instruction from the list of input instructions on the 
+    // Deletes an instruction from the list of input instructions on the
     // recipe input page when the 'X' next to the instruction is clicked
     removeInstruction: function(instruction) {
       var index = this.instructions.indexOf(instruction)
@@ -171,7 +169,7 @@ var demo = new Vue({
       }
     },
 
-    // Deletes an ingredient from the list of input ingredients on the 
+    // Deletes an ingredient from the list of input ingredients on the
     // recipe input page when the 'X' next to the ingredient is clicked
     removeIngredient: function(ingredient) {
       var index = this.ingredients.indexOf(ingredient)
@@ -182,7 +180,7 @@ var demo = new Vue({
 
     submitRecipe: function(){
       // TODO: Delete this comment after implemeting method
-      // RELEVANT variables: 
+      // RELEVANT variables:
       // ===========
       // recipe_name
       // recipe_keywords_input
@@ -201,8 +199,6 @@ var demo = new Vue({
       page = this;
       var savedRecipeIds = [];
       $.getJSON( get_URL, function( savedRecipesResponse ) {
-        console.log("recipe response:");
-        console.log(savedRecipesResponse);
         for (var i=0; i < savedRecipesResponse.length; i ++){
           if (savedRecipesResponse[i].dish_image_url === null){
             savedRecipesResponse[i].dish_image_url = '../images/default-missing-photo.png'
@@ -212,8 +208,7 @@ var demo = new Vue({
         }
         page.savedRecipes = savedRecipesResponse;
         page.savedRecipeIds = savedRecipeIds;
-        console.log(savedRecipeIds);
-      });      
+      });
     },
 
     clickBookmark: function(origin, recipe){
@@ -221,17 +216,16 @@ var demo = new Vue({
       page = this;
       var get_URL = baseURL + "/api/getSaved";
       var savedRecipeIds = [];
-        
-      var post_data = {recipe_id: recipe.id};     
+
+      var post_data = {recipe_id: recipe.id};
       if (page.savedRecipeIds.indexOf(recipe.id) === -1){
-        //not saved - want to add 
-        console.log('saving')
+        //not saved - want to add
         d3.select('#'+origin+recipe.id).attr("class", 'savebtn saved');
         var save_post_URL = baseURL + "/api/addSaved";
         $.post( save_post_URL,  post_data, function( data ) {
           page.savedRecipeIds.push(recipe.id);
           console.log("posted "+ recipe.id);
-        });        
+        });
       } else {
         //not saved - want to remove
         d3.select('#'+origin+recipe.id).attr("class", 'savebtn unsaved');
@@ -240,12 +234,12 @@ var demo = new Vue({
           var indexToRemove = page.savedRecipeIds.indexOf(recipe.id);
           page.savedRecipeIds.splice(indexToRemove, 1);
           console.log("removed "+ recipe.id);
-        });                
-      }      
-         
+        });
+      }
+
     },
 
-    // Implements the call to the backend when the user hits enter or search on the 
+    // Implements the call to the backend when the user hits enter or search on the
     // Search page
     searchForRecipes: function(searchString=""){
       if (searchString === ""){
@@ -253,7 +247,7 @@ var demo = new Vue({
       }
       var numberOfRecipes = "21";
       var offset = "0";
-      var get_URL = baseURL + "/api/search?term=" + searchString 
+      var get_URL = baseURL + "/api/search?term=" + searchString
                       + "&limit=" + numberOfRecipes + "&offset=" + offset;
       page = this;
 
@@ -270,12 +264,22 @@ var demo = new Vue({
     },
 
     activate_popup: function(recipe){
+      currentRecipe = recipe;
+      this.popup_recipe_time = recipe.time;
+      //make sure page is scrolled all the way to the top so user can see the popup
+      window.scroll(0,0);
       for(var i = 0; i < recipe.ingredients.length; i ++){
         var str = (recipe.ingredients[i].quant + " " + recipe.ingredients[i].text);
         this.popup_ingredients.push(str);
       }
       this.popup=true
+    },
+
+    deactivate_popup: function(popup){
+      //resetting ingredients array, and setting bool to false so popoup will disappear
+      this.popup_ingredients = [];
+      this.popup=false;
     }
+
   }
 });
-
