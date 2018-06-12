@@ -1,4 +1,4 @@
-var baseURL = "http://chefpp.herokuapp.com"
+var baseURL = "https://chefpp.herokuapp.com"
 
 var demo = new Vue({
   el: '#main',
@@ -78,7 +78,7 @@ var demo = new Vue({
           return;
         }
 
-        var post_URL = "http://chefpp.herokuapp.com/login";
+        var post_URL = baseURL + "/login";
         var post_data = {username: username, password: password};
         $.post( post_URL,  post_data, function( data ) {
           console.log(data)
@@ -93,7 +93,7 @@ var demo = new Vue({
 
     // Updates internal variables to reflect the fact that the user has logged out
     logOut: function() {
-        var get_URL = "http://chefpp.herokuapp.com/signout";
+        var get_URL = baseURL + "/signout";
         var vue_obj = this
        $.get(get_URL, function( data ) {
           vue_obj.username = '';
@@ -118,7 +118,7 @@ var demo = new Vue({
         return;
       }
 
-      var post_URL = "http://chefpp.herokuapp.com/signup";
+      var post_URL = baseURL + "/signup";
       var post_data = {username: username, password: password};
       var vue_obj = this;
       $.post( post_URL, post_data, function( data ) {
@@ -189,7 +189,29 @@ var demo = new Vue({
       // ingredients
       // instructions
       console.log("submitted recipe")
-      // TODO: Fill in with backend
+      // console.log(`recipe_name: ${this.recipe_name}`);
+      // console.log(`recipe_keywords_input: ${this.recipe_keywords_input}`);
+      // console.log(`recipe_keywords: ${this.recipe_keywords}`);
+      // console.log(`recipe_total_time: ${this.recipe_total_time}`);
+      // console.log(`ingredients: ${JSON.stringify(this.ingredients)}`);
+      // console.log(`instructions: ${this.instructions}`);      
+      var url = baseURL + "/api/addRecipe"
+      var post_data = {
+        "caption" : this.recipe_name,
+        "time" : this.recipe_total_time,
+        "keywords" : this.recipe_keywords_input,
+        "ingredients" : this.ingredients,
+        "instructions" : this.instructions
+      }
+      $.ajax({  
+        type: "POST",
+        url: url,
+        data: JSON.stringify(post_data),
+        contentType: "application/json",
+        success: function(data) {
+         console.log(`added recipe: ${JSON.stringify(data)}`); 
+        }
+       });
     },
 
     //SAVED RECIPES
@@ -203,7 +225,6 @@ var demo = new Vue({
           if (savedRecipesResponse[i].dish_image_url === null){
             savedRecipesResponse[i].dish_image_url = '../images/default-missing-photo.png'
           }
-          // d3.select('#home1').style("class", 'savebtn saved');  this doesn't work
           savedRecipeIds.push(savedRecipesResponse[i].id);
         }
         page.savedRecipes = savedRecipesResponse;

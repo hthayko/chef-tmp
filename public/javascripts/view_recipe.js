@@ -34,14 +34,18 @@ for (k = 0; k < recipe.instructions.length; k++){
 let arrowEndMargin = 10;
 let tlWidth = window.screen.width// - (arrowEndMargin*2);
 let tlHeight = 50;
-let tlSvgHeight = tlHeight + 20;
+let tlSvgHeight = tlHeight;
 let arrowMargin = 5;
 let arrowTipX = 8;
 let currStepId = 0;
 let DEFAULT_INSTRUCTION_TIME_IN_MINS = 2;
+let baseURL = 'http://localhost:4000';
 
 let scaledWidths = getScaledWidths(recipe, tlWidth, arrowMargin);
 let xPositions = [];
+
+//To store users saved recipes
+let isSaved = false;
 
 main(function(){
   highlightArrow(0, 'zero');
@@ -70,6 +74,14 @@ function main(callback){
       .text(recipe.ingredients[j].quant + " " + recipe.ingredients[j].text);
   }
 
+  //Sets whether recipe is saved
+  checkSaved();
+
+  //Set click listener for save button
+  d3.select('#big-savebtn')
+    .on('click', function(){
+      clickBookmark();
+    });
 
   //Loads first step into view
   replaceStep();
@@ -162,6 +174,46 @@ function main(callback){
 }
 
 /************ HELPER FUNCTIONS ******************/
+
+function checkSaved(){
+  var get_saved_URL = baseURL + "/api/getSaved";
+  $.getJSON( get_saved_URL, function( savedRecipesResponse ) {
+    let i=0;
+    while(i < savedRecipesResponse.length){
+      if(savedRecipesResponse[i].id === recipe.id){
+        isSaved = true;
+        break;
+      }
+      i++;
+    }
+    if (isSaved) d3.select('#big-savebtn').attr("class", 'savebtn saved');
+    else d3.select('#big-savebtn').attr("class", 'savebtn unsaved');
+  });    
+}  
+
+
+function clickBookmark(){
+  console.log("clicked bookmark " + recipe.id);
+  var post_data = {recipe_id: recipe.id};
+  if (isSaved){
+    //saved - want to remove
+    d3.select('#big-savebtn').attr("class", 'unsaved');
+    var remove_post_URL = baseURL + "/api/removeSaved";
+    $.post( remove_post_URL,  post_data, function( data ) {
+      isSaved = false;
+      console.log("removed "+ recipe.id);
+    });    
+  } else {
+    //not saved - want to add
+    d3.select('#big-savebtn').attr("class", 'saved');
+    var save_post_URL = baseURL + "/api/addSaved";
+    $.post( save_post_URL,  post_data, function( data ) {
+      isSaved = true;
+      console.log("posted "+ recipe.id);
+    });
+  }
+}
+
 /* Transitions timeline arrows and changes step ID to update to next step */
 function goToNextStep(){
   unhighlightArrow(currStepId, numberToString[currStepId]);

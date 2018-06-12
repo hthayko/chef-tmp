@@ -5,7 +5,9 @@
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet"> 
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,900i" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/stylesheets/view_recipe.css">
 </head>
 <body>
@@ -36,12 +38,22 @@
     <p class='section-title dark-color' id=ingr-title>Ingredients</p>
   </div>
 
-  <div id=timelinediv>
-    <div id=headerstuff>
-      <span id=recipename>recipe name</span>
-      <img src="../images/logos/SansSerifLogo-white.jpg" id="logo">
+  <div id=total-header-container>
+    <div id=logo-container>     
+      <a href="/"><button id=backbtn><i class="fa fa-arrow-left fa-2x" aria-hidden="true"></i></button></a>
+      <a href="/"><img src="../images/logos/SansSerifLogo-v2.png" id="logo"></a>
     </div>
-    <div id=total-time-label>Total Time: 65 mins</div>
+
+    <div id=title-bar-container>
+      <div style="float: left;">
+        <div id=recipename>recipe name</div>
+      </div>
+      <div style=" display: flex; flex-direction: row; ">
+        <button id='big-savebtn' class="unsaved"><div id="save-button-label">Save Recipe  </div><i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
     <svg id=timeline>
       <defs> 
         <pattern id="gray-stripe" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
@@ -51,7 +63,9 @@
           <rect id='pattern' width="4" height="8" transform="translate(0,0)" fill="#64CECA"></rect> 
         </pattern>        
       </defs>
-    </svg>
+    </svg> 
+
+    <div id=total-time-label>Total Time</div>
   </div>
   <script >  window.recipe = <%- recipe %> </script>
   <script type="text/javascript" src="/javascripts/view_recipe.js"></script>

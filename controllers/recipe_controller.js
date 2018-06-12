@@ -30,8 +30,8 @@ module.exports = {
   },
 
   addRecipe: (recipeInfo) => {
-    console.log(`controller addRecipe: recipeInfo: ${recipeInfo}`)
-    return recipeModel.addRecipe(recipeInfo)
+    var nri = helper.formatRecipeForSaving(recipeInfo)
+    return recipeModel.addRecipe(nri)
     .then(r => {
       var ret = _.map([r], helper.formatRecipe)
       return ret;

@@ -24,9 +24,23 @@ module.exports = {
     })
     delete o["ingredient"];
     return o;
+  },
+
+  formatRecipeForSaving : (r) => {
+    var o = r;
+    o.keywords = JSON.stringify(o.keywords.split(", "))
+    // caption     
+    // time
+    o.ingredient = JSON.stringify(_.map(o.ingredients, ing => {
+      return {"ingredient" : ing.quantity + '\n                \n                \n                  ' + ing.text};
+    }))
+    delete o.ingredients
+    o.instructions = JSON.stringify(_.map(o.instructions, ins => {
+      return {"instructions" : ins};
+    }))
+    return o;
   }
 }
-
 
 function extractTimeFromText(text) {
   var ret;

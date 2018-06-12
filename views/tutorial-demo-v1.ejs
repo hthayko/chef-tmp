@@ -64,7 +64,6 @@
           </button>
         </div>
       </div>
-<!-- v-bind:class="savedRecipes.indexOf(recipe) > -1 ? 'saved' : 'unsaved'" -->
     </div>
 
     <!-- SAVED RECIPES -->
@@ -72,10 +71,8 @@
     <div id="savedRecipesWrapper" class="resultsWrapper" v-if="active === 'savedRecipes'">
       <h1>Your Saved Recipes</h1>
       <div class="recipeResultsWrapper">
-        <div v-for="recipe in savedRecipes" class='recipeBox'> <!-- TODO replace the list with saved -->
-
+        <div v-for="recipe in savedRecipes" class='recipeBox'>
           <a v-bind:href="'recipe/' + recipe.id"><img v-bind:src="recipe.dish_image_url" /></a>
-
           <button v-bind:id="'save' + recipe.id" v-on:click='clickBookmark("save", recipe)' class="savebtn saved"><i class="fa fa-bookmark fa-2x" aria-hidden="true"></i>
           </button>
           <p >{{recipe.caption}}</p>

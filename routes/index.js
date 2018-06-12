@@ -259,6 +259,8 @@ router.get('/api/getSaved', isAuthenticated, (req, res, next) => {
 
 
 router.post('/api/addRecipe', isAuthenticated, (req, res, next) => {
+    console.log("got hit with:")
+    console.log(req.body)
     recipeController.addRecipe(req.body)
     .then((data) => {
       res.send(data)

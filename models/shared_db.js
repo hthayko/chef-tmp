@@ -1,10 +1,10 @@
 var options = {    
-  // query: function (e) {
-  //   console.log('QUERY:', e.query);
-  //   if (e.params) {
-  //       console.log('PARAMS:', e.params);
-  //   }
-  // }
+  query: function (e) {
+    console.log('QUERY:', e.query);
+    if (e.params) {
+        console.log('PARAMS:', e.params);
+    }
+  }
 };
 var pgp = require('pg-promise')(options);
 var parseDbUrl = require("parse-database-url");
