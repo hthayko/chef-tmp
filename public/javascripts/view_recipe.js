@@ -39,7 +39,7 @@ let arrowMargin = 5;
 let arrowTipX = 8;
 let currStepId = 0;
 let DEFAULT_INSTRUCTION_TIME_IN_MINS = 2;
-let baseURL = 'http://localhost:4000';
+let baseURL = "https://chefpp.herokuapp.com"
 
 let scaledWidths = getScaledWidths(recipe, tlWidth, arrowMargin);
 let xPositions = [];
