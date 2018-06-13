@@ -1,4 +1,4 @@
-var baseURL = "https://chefpp.herokuapp.com"
+var baseURL = "http://chefpp.herokuapp.com"
 
 var demo = new Vue({
   el: '#main',
